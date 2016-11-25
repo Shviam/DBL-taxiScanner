@@ -13,7 +13,7 @@ public class Output{
         // in the format p, taxi, destination node
         addToMinuteOutput('p '+taxi+''+destination);
     }
-    
+
     public void dropOffPassenger(int taxi, int destination){
         //in the format d, taxi, destination node
         addToMinuteOutput('d '+taxi+''+destination);
