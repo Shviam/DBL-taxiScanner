@@ -1,5 +1,5 @@
 //Add to our package
-package bruwmbruwm;
+package Bruwmbruwm;
 
 //This class will have methods for all Output commands...
 //Other classes can call upon the methods of this class to write output to Taxiscanner

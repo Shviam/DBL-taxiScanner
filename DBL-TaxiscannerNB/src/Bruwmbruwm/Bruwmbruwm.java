@@ -1,4 +1,4 @@
-package bruwmbruwm;
+package Bruwmbruwm;
 
 /**
  *
