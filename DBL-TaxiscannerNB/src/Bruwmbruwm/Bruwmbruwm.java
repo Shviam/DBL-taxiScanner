@@ -101,20 +101,16 @@ public class Bruwmbruwm {
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
         /****************************************************/
         for (int x = training_time; x < total_time; x++){
-<<<<<<< HEAD
-            temp = input.nextLine();
-            int whitespace = temp.indexOf(" ");
-            int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
-            for(int y = 0; y < amount_of_customers; y++){
-                
-            }
-=======
+
+         
+
             input.nextLine();
-            String feest = output.getMinuteOutput();
-            System.out.println(feest);
+            output.taxiSetPosition(1, 1);
             output.pickUpPassenger(1,1);
+            output.taxiGoTo(1, 2);
+            output.dropOffPassenger(1, 2);
             output.sendOutput();
->>>>>>> origin/master
+
         }
     }
     
