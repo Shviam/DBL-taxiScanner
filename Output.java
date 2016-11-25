@@ -13,20 +13,19 @@ public class Output{
         // in the format p, taxi, destination node
         addToMinuteOutput('p '+taxi+''+destination);
     }
+    
     public void dropOffPassenger(int taxi, int destination){
         //in the format d, taxi, destination node
         addToMinuteOutput('d '+taxi+''+destination);
     }
+
     public void taxiGoTo(int taxi, int destination){
         //in the format m, taxi, node to travel to
         //this is only possible if the taxi is adjacent to the destination node...
         //AKA you can only travel one edge at a time
         addToMinuteOutput('m '+taxi+''+destination);
     }
-    public void nextMinute() {
-        //write c to minuteoutput, this ends the current minute when read by peach
-        addToMinuteOutput('c');
-    }
+
     //should only be used before initialization, use taxiGoTo afterwards
     public void taxiSetPosition(int taxi, int node){
         addToMinuteOutput('m '+taxi+''+node);
@@ -36,10 +35,13 @@ public class Output{
     private void addToMinuteOutput(String output){
         minuteOutput += minuteOutput+output;
     }
+
     //sends output of the current minute to Taxiscanner
     //this will in turn start a new minute so input should be read after calling this
     //also clears minuteOutput
     public void sendOutput(){
+        //write c to minuteoutput, this ends the current minute when read by peach
+        addToMinuteOutput('c');
         println(minuteOutput);
         minuteOutput = '';
     }
