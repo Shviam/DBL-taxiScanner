@@ -5,6 +5,7 @@ package Bruwmbruwm;
  * @author s156035
  */
 public class Bruwmbruwm {
+    // Preamble variables
     float alpha;
     int max_drop_off_time;
     int number_of_taxis, seats;
@@ -12,7 +13,11 @@ public class Bruwmbruwm {
     public int number_nodes;
     int training_time;
     int total_time;
-
+    
+    //Temporary globals
+    int max_distance;
+    
+    //Preamble
     TaxiScanner input = TaxiScanner.getInstance();
     int preamble_length;
     
@@ -114,10 +119,23 @@ public class Bruwmbruwm {
     }
     
     //Bfs algorithm
-    public Node[] BFS(int end_node){
-            Node[] paths;
-            paths = new Node[number_nodes];
-            
-            
+    public void BFS(Node start_node, Node end_node){
+        for(int x = 0; x < number_nodes; x++){
+            nodes[x].distannce = number_nodes;
+        }
+        max_distance = number_nodes;
+        BFSpathfinder(start_node, end_node);
+        return;
+    }
+    public boolean BFSpathfinder(Node current_node, Node end_node){
+        for(int x = 0; x < current_node.position; x++){
+            if (current_node.neighbours[x] != end_node.position){
+                
+            }
+            else{
+                max_distance = nodes[current_node.neighbours[x]].distannce;
+            }
+        }
+        return false;
     }
 }
