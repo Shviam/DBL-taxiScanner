@@ -12,6 +12,7 @@ package Bruwmbruwm;
 public class Customer {
     int current_node, goal_node;
     
+    
     public Customer(int start_pos, int end_pos){
             current_node = start_pos;
             goal_node = end_pos;

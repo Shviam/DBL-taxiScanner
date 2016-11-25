@@ -12,6 +12,8 @@ import java.util.Stack;
 public class Taxi {
     Stack path = new Stack();
     int taxi_id;
+    Customer served;
+    Node destination;
     
     public void Taxi(int id){
         taxi_id = id;
