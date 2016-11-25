@@ -1,5 +1,7 @@
 package Bruwmbruwm;
 
+import java.util.Stack;
+
 /**
  *
  * @author s156035
@@ -16,6 +18,7 @@ public class Bruwmbruwm {
     
     //Temporary globals
     int max_distance;
+    boolean ended;
     
     //Preamble
     TaxiScanner input = TaxiScanner.getInstance();
@@ -119,21 +122,34 @@ public class Bruwmbruwm {
     }
     
     //Bfs algorithm
-    public void BFS(Node start_node, Node end_node){
+    public void BFS(Node start_node, Node end_node, Taxi taxi){
         for(int x = 0; x < number_nodes; x++){
             nodes[x].distannce = number_nodes;
         }
         max_distance = number_nodes;
-        BFSpathfinder(start_node, end_node);
+        
+        //the end and start are swapped, so the Stack doesn't go nuts
+        BFSpathfinder(end_node, start_node, taxi);
         return;
     }
-    public boolean BFSpathfinder(Node current_node, Node end_node){
+    public boolean BFSpathfinder(Node current_node, Node end_node, Taxi taxi){
         for(int x = 0; x < current_node.position; x++){
-            if (current_node.neighbours[x] != end_node.position){
-                
+            if (ended){
+                return false;
+            }
+            else if (current_node.neighbours[x] != end_node.position){
+                if (BFSpathfinder(nodes[current_node.neighbours[x]], end_node, taxi)){
+                    taxi.path.push(current_node);
+                    return true;
+                } 
+                else{
+                    return false;
+                }
             }
             else{
                 max_distance = nodes[current_node.neighbours[x]].distannce;
+                taxi.path.push(nodes[current_node.neighbours[x]]);
+                return true;
             }
         }
         return false;
