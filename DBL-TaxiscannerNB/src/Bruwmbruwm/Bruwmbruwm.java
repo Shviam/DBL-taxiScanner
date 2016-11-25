@@ -24,6 +24,8 @@ public class Bruwmbruwm {
     TaxiScanner input = TaxiScanner.getInstance();
     int preamble_length;
     
+    Output output = new Output();
+    
     String temp;
     
     public void run(){
@@ -100,7 +102,10 @@ public class Bruwmbruwm {
         /****************************************************/
         for (int x = training_time; x < total_time; x++){
             input.nextLine();
-            input.println("c");
+            String feest = output.getMinuteOutput();
+            System.out.println(feest);
+            output.pickUpPassenger(1,1);
+            output.sendOutput();
         }
     }
     
