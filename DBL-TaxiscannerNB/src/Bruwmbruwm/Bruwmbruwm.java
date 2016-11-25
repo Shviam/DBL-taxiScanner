@@ -99,8 +99,12 @@ public class Bruwmbruwm {
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
         /****************************************************/
         for (int x = training_time; x < total_time; x++){
-            input.nextLine();
-            input.println("c");
+            temp = input.nextLine();
+            int whitespace = temp.indexOf(" ");
+            int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
+            for(int y = 0; y < amount_of_customers; y++){
+                
+            }
         }
     }
     
