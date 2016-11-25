@@ -1,6 +1,7 @@
 package Bruwmbruwm;
 
 import java.util.Stack;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,7 +15,8 @@ public class Bruwmbruwm {
     Node[] nodes;
     public int number_nodes;
     int training_time;
-    int total_time;
+    int total_time;   
+    
     
     //Temporary globals
     int max_distance;
@@ -27,6 +29,9 @@ public class Bruwmbruwm {
     Output output = new Output();
     
     String temp;
+    
+    
+    ArrayList<Customer> customers = new ArrayList<>();
     
     public void run(){
         preamble_length = Integer.parseInt(input.nextLine());
@@ -101,20 +106,19 @@ public class Bruwmbruwm {
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
         /****************************************************/
         for (int x = training_time; x < total_time; x++){
-<<<<<<< HEAD
             temp = input.nextLine();
             int whitespace = temp.indexOf(" ");
             int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
             for(int y = 0; y < amount_of_customers; y++){
+                temp = temp.substring(whitespace);
+                whitespace = temp.indexOf(" ");
+                int start_pos = Integer.parseInt(temp.substring(0, whitespace));
                 
+                temp = temp.substring(whitespace);
+                whitespace = temp.indexOf(" ");
+                int end_pos = Integer.parseInt(temp.substring(0, whitespace));
+                customers.add(new Customer(start_pos, end_pos));
             }
-=======
-            input.nextLine();
-            String feest = output.getMinuteOutput();
-            System.out.println(feest);
-            output.pickUpPassenger(1,1);
-            output.sendOutput();
->>>>>>> origin/master
         }
     }
     
