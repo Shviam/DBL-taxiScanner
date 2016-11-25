@@ -5,30 +5,32 @@ package bruwmbruwm;
 //Other classes can call upon the methods of this class to write output to Taxiscanner
 //All output from the methods is concatenated as one string in the end, and then sent to TaxiScanner as output for one 'minute'
 public class Output{
-
+    
+     TaxiScanner taxiscanner = TaxiScanner.getInstance();
+     
     //the string that holds all output for current minute, this will be send to Taxiscanner
-    public String minuteOutput = '';
+    public String minuteOutput = "";
 
     public void pickUpPassenger(int taxi, int destination){
         // in the format p, taxi, destination node
-        addToMinuteOutput('p '+taxi+''+destination);
+        addToMinuteOutput("p "+taxi+" "+destination);
     }
 
     public void dropOffPassenger(int taxi, int destination){
         //in the format d, taxi, destination node
-        addToMinuteOutput('d '+taxi+''+destination);
+        addToMinuteOutput("d "+taxi+" "+destination);
     }
 
     public void taxiGoTo(int taxi, int destination){
         //in the format m, taxi, node to travel to
         //this is only possible if the taxi is adjacent to the destination node...
         //AKA you can only travel one edge at a time
-        addToMinuteOutput('m '+taxi+''+destination);
+        addToMinuteOutput("m "+taxi+" "+destination);
     }
 
     //should only be used before initialization, use taxiGoTo afterwards
     public void taxiSetPosition(int taxi, int node){
-        addToMinuteOutput('m '+taxi+''+node);
+        addToMinuteOutput("m "+taxi+" "+node);
     }
 
     //adds a command to our output string minuteOutput for the current minute
@@ -41,8 +43,8 @@ public class Output{
     //also clears minuteOutput
     public void sendOutput(){
         //write c to minuteoutput, this ends the current minute when read by peach
-        addToMinuteOutput('c');
-        println(minuteOutput);
-        minuteOutput = '';
+        addToMinuteOutput("c");
+        taxiscanner.println(minuteOutput);
+        minuteOutput = "";
     }
 }
