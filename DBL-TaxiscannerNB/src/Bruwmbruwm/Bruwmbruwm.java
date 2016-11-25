@@ -107,6 +107,8 @@ public class Bruwmbruwm {
         /****************************************************/
         for (int x = training_time; x < total_time; x++){
 
+            // Process clients into the arraylist
+
             temp = input.nextLine();
             int whitespace = temp.indexOf(" ");
             int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
@@ -119,6 +121,11 @@ public class Bruwmbruwm {
                 whitespace = temp.indexOf(" ");
                 int end_pos = Integer.parseInt(temp.substring(0, whitespace));
                 customers.add(new Customer(start_pos, end_pos));
+            }
+            
+            //Check for idle taxi
+            for(int y = 0; y < number_of_taxis; y++){
+                
             }
         }
     }
