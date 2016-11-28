@@ -18,4 +18,13 @@ public class Taxi {
     public void Taxi(int id){
         taxi_id = id;
     }
+    
+    public boolean isIdle (){
+        if(destination != null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

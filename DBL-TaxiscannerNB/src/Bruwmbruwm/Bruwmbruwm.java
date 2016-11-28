@@ -13,6 +13,7 @@ public class Bruwmbruwm {
     int max_drop_off_time;
     int number_of_taxis, seats;
     Node[] nodes;
+    Taxi[] taxis;
     public int number_nodes;
     int training_time;
     int total_time;   
@@ -51,6 +52,11 @@ public class Bruwmbruwm {
                     //Find end of first integer
                     int whitespace = temp.indexOf(" ");
                     number_of_taxis = Integer.parseInt(temp.substring(0, whitespace)); 
+                    
+                    taxis = new Taxi[number_of_taxis];
+                    for(int y = 0; y < number_of_taxis; y++){
+                        taxis[y] = new Taxi();
+                    }
                     
                     seats = Integer.parseInt(temp.substring(whitespace+1, temp.length()));
                     break;
@@ -125,7 +131,9 @@ public class Bruwmbruwm {
             
             //Check for idle taxi
             for(int y = 0; y < number_of_taxis; y++){
-                
+              if(!taxis[y].isIdle()){
+                  //Take next passanger
+              }
             }
         }
     }
