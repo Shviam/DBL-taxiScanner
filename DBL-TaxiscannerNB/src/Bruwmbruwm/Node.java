@@ -13,7 +13,7 @@ class Node{
     int[] neighbours;
     int i = 0;
     int position;
-    int distannce;
+    int distance;
 
     public Node(int x){
         position = x;

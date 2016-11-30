@@ -147,24 +147,18 @@ public class Bruwmbruwm {
     /* Misc Methods *************************************************/
     /****************************************************************/
     public boolean inBetween(int x, int lower_bound, int upper_bound){
-        if(x < lower_bound || x > upper_bound){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return !(x < lower_bound || x > upper_bound);
     }
     
     //Bfs algorithm
     public void BFS(Node start_node, Node end_node, Taxi taxi){
         for(int x = 0; x < number_nodes; x++){
-            nodes[x].distannce = number_nodes;
+            nodes[x].distance = number_nodes;
         }
         max_distance = number_nodes;
         
         //the end and start are swapped, so the Stack doesn't go nuts
         BFSpathfinder(end_node, start_node, taxi);
-        return;
     }
     public boolean BFSpathfinder(Node current_node, Node end_node, Taxi taxi){
         for(int x = 0; x < current_node.position; x++){
