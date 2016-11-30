@@ -28,6 +28,8 @@ public class Taxi {
         }
     }
     
+    
+    //Pop top of stack
     public int move(){
         return (int)(path.pop());
     }
