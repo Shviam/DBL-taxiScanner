@@ -27,4 +27,8 @@ public class Taxi {
             return false;
         }
     }
+    
+    public int move(){
+        return (int)(path.pop());
+    }
 }
