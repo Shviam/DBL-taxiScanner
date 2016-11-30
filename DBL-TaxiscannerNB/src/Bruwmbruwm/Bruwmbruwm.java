@@ -1,7 +1,11 @@
 package Bruwmbruwm;
 
-import java.util.Stack;
+import static java.lang.Integer.max;
 import java.util.ArrayList;
+import static java.util.Arrays.fill;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 
 /**
  *
@@ -18,6 +22,9 @@ public class Bruwmbruwm {
     int training_time;
     int total_time;   
     
+    //heuristic variables
+    int[][] heuristicDis;
+    public int number_waypoints = 16;
     
     //Temporary globals
     int max_distance;
@@ -175,11 +182,60 @@ public class Bruwmbruwm {
                 }
             }
             else{
-                max_distance = nodes[current_node.neighbours[x]].distannce;
+                max_distance = nodes[current_node.neighbours[x]].distance;
                 taxi.path.push(nodes[current_node.neighbours[x]]);
                 return true;
             }
         }
         return false;
+    }
+    
+    //initializing the waypoint array for heuristic function
+    void initHeuristic(){
+        //getting a random start waypoint
+        Random rand = new Random();
+        int start = rand.nextInt();
+        
+        //initialize waypoint array
+        heuristicDis = new int[number_waypoints][number_nodes];
+        
+        //run BFS for all waypoints
+        for(int i=0; i<number_waypoints; i++){
+            //make queue for the BFS
+            Queue<Integer> Q = new LinkedList<>();
+            Q.add(start);
+            
+            //fill array with -1, meaning unvisited
+            fill(heuristicDis[i], -1);
+            //set start distance to 0
+            heuristicDis[i][start] = 0;
+            while(!Q.isEmpty()){
+                int u = Q.remove();
+                for(int e : nodes[u].neighbours){
+                    //if neighbour is unvisited
+                    if(heuristicDis[i][e] == -1){
+                        heuristicDis[i][e] = heuristicDis[i][u] + 1;
+                        Q.add(e);
+                        
+                        //get the next start waypoint as farthest from the current
+                        if(heuristicDis[i][e] > heuristicDis[i][start]){
+                            start = e;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    int heuristic(int A, int B){
+        int dis = 0;
+        
+        for(int i=0; i<number_waypoints; i++){
+            //triangle inequality
+            int wayDis = max(heuristicDis[i][A] - heuristicDis[i][B], heuristicDis[i][B] - heuristicDis[i][A]);
+            //get the max from all the waypoints
+            dis = max(dis, wayDis);
+        }
+        return dis;
     }
 }
