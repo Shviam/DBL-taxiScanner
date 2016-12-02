@@ -196,16 +196,17 @@ public class Bruwmbruwm {
     void initHeuristic(){
         //getting a random start waypoint
         Random rand = new Random();
-        int start = rand.nextInt();
+        int start = rand.nextInt(number_nodes);
         
         //initialize waypoint array
-        heuristicDis = new int[number_waypoints][number_nodes];
+        heuristicDis = new int[number_waypoints+5][number_nodes+5];
         
         //run BFS for all waypoints
         for(int i=0; i<number_waypoints; i++){
             //make queue for the BFS
             Queue<Integer> Q = new LinkedList<>();
             Q.add(start);
+            nodes[start].waypoint = true;
             
             //fill array with -1, meaning unvisited
             fill(heuristicDis[i], -1);
@@ -220,7 +221,7 @@ public class Bruwmbruwm {
                         Q.add(e);
                         
                         //get the next start waypoint as farthest from the current
-                        if(heuristicDis[i][e] > heuristicDis[i][start]){
+                        if(heuristicDis[i][e] > heuristicDis[i][start] && !nodes[e].waypoint){
                             start = e;
                         }
                     }
@@ -241,12 +242,11 @@ public class Bruwmbruwm {
         return dis;
     }
     
-    Stack Astar(int source, int goal){
+    Stack<Integer> aStar(int source, int goal){
         PriorityQueue<NodeDist> Q = new PriorityQueue<>();
         //resetting the node values
         for (Node node : nodes) {
             node.distance = Integer.MAX_VALUE;
-            node.fscore = Integer.MAX_VALUE;
             node.visited = false;
         }
         //setting the source distance to 0 and pushing to queue
@@ -256,19 +256,17 @@ public class Bruwmbruwm {
             NodeDist nd = Q.poll();
             int k = nd.i;
             int d = nd.d;
+            //in case of multiple entries in queue, this node is already explored
+            if(nodes[k].visited) continue;
             nodes[k].visited = true;
             //if we reached the goal, stop searching
             if(k == goal) break;
-                    
-            //in case of multiple entries in queue, this node is already explored
-            if(nodes[k].fscore <= d) continue;
             
             //check every neighbour of k
             for(int u : nodes[k].neighbours){
                 //if already explored, skip it
                 if(nodes[u].visited) 
                     continue;
-                
                 //update distance to source, and fscore = dis to source + heuristic to end
                 int newDis = nodes[k].distance + 1;
                 int fscore = newDis + heuristic(u, goal);
@@ -277,7 +275,6 @@ public class Bruwmbruwm {
                 if(newDis < nodes[u].distance){
                     //set node values and add to queue
                     nodes[u].distance = newDis;
-                    nodes[u].fscore = fscore;
                     nodes[u].parent = k;
                     Q.add(new NodeDist(u, fscore));
                 }
@@ -285,11 +282,11 @@ public class Bruwmbruwm {
         }
         //find the path by backtracking from the goal
         int k = goal;
-        Stack path = new Stack();
+        Stack<Integer> p = new Stack<>();
         while(k != source){
-            path.add(goal);
+            p.add(k);
             k = nodes[k].parent;
         }
-        return path;
+        return p;
     }
 }

@@ -15,6 +15,7 @@ public class NodeDist implements Comparable<NodeDist>{
         i = index;
         d = dis;
     }
+    @Override
     public int compareTo(NodeDist other){
         return (d-other.d);
     }

@@ -13,13 +13,17 @@ class Node{
     int[] neighbours;
     int i = 0;
     int position;
+    
+    //needed for A star search
     int distance;
     int fscore;
     boolean visited;
+    boolean waypoint;
     int parent;
 
     public Node(int x){
         position = x;
+        waypoint = false;
     }
 
     //initialise the array with the amount of edges specified in the Preamble
