@@ -9,6 +9,13 @@ package Bruwmbruwm;
  *
  * @author s151914
  */
-public class NodeDist {
-    
+public class NodeDist implements Comparable<NodeDist>{
+    int i, d;
+    NodeDist(int index, int dis){
+        i = index;
+        d = dis;
+    }
+    public int compareTo(NodeDist other){
+        return (d-other.d);
+    }
 }

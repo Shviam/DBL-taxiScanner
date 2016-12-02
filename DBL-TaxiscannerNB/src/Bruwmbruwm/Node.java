@@ -14,7 +14,7 @@ class Node{
     int i = 0;
     int position;
     int distance;
-    int gscore;
+    int fscore;
     boolean visited;
     int parent;
 

@@ -243,36 +243,51 @@ public class Bruwmbruwm {
     
     Stack Astar(int source, int goal){
         PriorityQueue<NodeDist> Q = new PriorityQueue<>();
+        //resetting the node values
         for (Node node : nodes) {
             node.distance = Integer.MAX_VALUE;
+            node.fscore = Integer.MAX_VALUE;
             node.visited = false;
         }
+        //setting the source distance to 0 and pushing to queue
         nodes[source].distance = 0;
         Q.add(new NodeDist(source, heuristic(source, goal)));
         while(!Q.isEmpty()){
             NodeDist nd = Q.poll();
             int k = nd.i;
+            int d = nd.d;
             nodes[k].visited = true;
+            //if we reached the goal, stop searching
             if(k == goal) break;
+                    
+            //in case of multiple entries in queue, this node is already explored
+            if(nodes[k].fscore <= d) continue;
+            
+            //check every neighbour of k
             for(int u : nodes[k].neighbours){
+                //if already explored, skip it
                 if(nodes[u].visited) 
                     continue;
+                
+                //update distance to source, and fscore = dis to source + heuristic to end
                 int newDis = nodes[k].distance + 1;
-                int gscore = newDis + heuristic(u, goal);
-                if(gscore <= nodes[u].gscore) 
-                    continue;
+                int fscore = newDis + heuristic(u, goal);
+                
+                //in case there exist a faster path to u
                 if(newDis < nodes[u].distance){
+                    //set node values and add to queue
                     nodes[u].distance = newDis;
-                    nodes[u].gscore = gscore;
+                    nodes[u].fscore = fscore;
                     nodes[u].parent = k;
-                    Q.add(new NodeDist(u, gscore));
+                    Q.add(new NodeDist(u, fscore));
                 }
             }
         }
+        //find the path by backtracking from the goal
         int k = goal;
         Stack path = new Stack();
         while(k != source){
-            path.push(goal);
+            path.add(goal);
             k = nodes[k].parent;
         }
         return path;
