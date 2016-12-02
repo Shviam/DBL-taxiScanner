@@ -4,8 +4,10 @@ import static java.lang.Integer.max;
 import java.util.ArrayList;
 import static java.util.Arrays.fill;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  *
@@ -237,5 +239,42 @@ public class Bruwmbruwm {
             dis = max(dis, wayDis);
         }
         return dis;
+    }
+    
+    Stack Astar(int source, int goal){
+        PriorityQueue<NodeDist> Q = new PriorityQueue<>();
+        for (Node node : nodes) {
+            node.distance = Integer.MAX_VALUE;
+            node.visited = false;
+        }
+        nodes[source].distance = 0;
+        Q.add(new NodeDist(source, heuristic(source, goal)));
+        while(!Q.isEmpty()){
+            NodeDist nd = Q.poll();
+            int k = nd.i;
+            nodes[k].visited = true;
+            if(k == goal) break;
+            for(int u : nodes[k].neighbours){
+                if(nodes[u].visited) 
+                    continue;
+                int newDis = nodes[k].distance + 1;
+                int gscore = newDis + heuristic(u, goal);
+                if(gscore <= nodes[u].gscore) 
+                    continue;
+                if(newDis < nodes[u].distance){
+                    nodes[u].distance = newDis;
+                    nodes[u].gscore = gscore;
+                    nodes[u].parent = k;
+                    Q.add(new NodeDist(u, gscore));
+                }
+            }
+        }
+        int k = goal;
+        Stack path = new Stack();
+        while(k != source){
+            path.push(goal);
+            k = nodes[k].parent;
+        }
+        return path;
     }
 }

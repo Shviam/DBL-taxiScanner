@@ -14,6 +14,9 @@ class Node{
     int i = 0;
     int position;
     int distance;
+    int gscore;
+    boolean visited;
+    int parent;
 
     public Node(int x){
         position = x;
