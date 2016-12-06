@@ -12,7 +12,7 @@ package Bruwmbruwm;
 class Node{
     private Node[] nodes;
     int[] neighbours;
-    int i = 0;
+    int di = 0;
     int position;
     
     //needed for A star search
@@ -35,8 +35,8 @@ class Node{
 
     //Add an edge to the neighbours
     public void write_neighbour(int neighbour){		
-        neighbours[i] = neighbour;
-        i++;						//increse index
+        neighbours[di] = neighbour;
+        di++;						//increse index
         return;
     }
 }

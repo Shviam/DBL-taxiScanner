@@ -87,12 +87,19 @@ public class Bruwmbruwm {
                 customers.add(new Customer(start_pos, end_pos));
             }
             
-            //Check for idle taxi
+            //Check for non-idle taxi
             for(int y = 0; y < input.number_of_taxis; y++){
               if(!taxis[y].isIdle()){
-                  //Take next passanger
+                  if(!taxis[y].path.isEmpty()){
+                    taxis[y].taxiPosition = taxis[y].path.pop();
+                    output.taxiGoTo(y, taxis[y].taxiPosition);
+                  }
+                  else{
+                      doFunction();
+                  }
               }
             }
+            output.sendOutput();
         }
     }
     
@@ -109,6 +116,7 @@ public class Bruwmbruwm {
         
         //the end and start are swapped, so the Stack doesn't go nuts
         BFSpathfinder(end_node, start_node, taxi);
+        ended = false;
     }
     public boolean BFSpathfinder(Node current_node, Node end_node, Taxi taxi){
         for(int x = 0; x < current_node.position; x++){
@@ -117,7 +125,8 @@ public class Bruwmbruwm {
             }
             else if (current_node.neighbours[x] != end_node.position){
                 if (BFSpathfinder(nodes[current_node.neighbours[x]], end_node, taxi)){
-                    taxi.path.push(current_node);
+                    taxi.path.push(current_node.position);
+                    ended = true;
                     return true;
                 } 
                 else{
@@ -126,7 +135,7 @@ public class Bruwmbruwm {
             }
             else{
                 max_distance = nodes[current_node.neighbours[x]].distance;
-                taxi.path.push(nodes[current_node.neighbours[x]]);
+                taxi.path.push(nodes[current_node.neighbours[x]].position);
                 return true;
             }
         }
@@ -192,4 +201,8 @@ public class Bruwmbruwm {
         }
     } 
     
+     public void doFunction(){
+         //Will do the function the taxi is set to do
+         
+     }
 }

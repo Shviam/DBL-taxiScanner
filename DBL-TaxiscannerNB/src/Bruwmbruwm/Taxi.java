@@ -10,7 +10,7 @@ import java.util.Stack;
  * @author s156035
  */
 public class Taxi {
-    Stack path = new Stack();
+    Stack<Integer> path = new Stack();
     int taxi_id;
     Customer served;
     Node destination;
