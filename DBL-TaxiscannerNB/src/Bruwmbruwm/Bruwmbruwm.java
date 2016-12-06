@@ -32,7 +32,7 @@ public class Bruwmbruwm {
     int max_distance;
     boolean ended;
     String temp;
-        /*
+    /*
         for (int x = training_time; x < total_time; x++){
 
             // Process clients into the arraylist
@@ -102,5 +102,6 @@ public class Bruwmbruwm {
     
     
     
+
     
 }
