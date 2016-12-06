@@ -15,6 +15,7 @@ public class Taxi {
     Customer served;
     Node destination;
     
+    
     public void Taxi(int id){
         taxi_id = id;
     }

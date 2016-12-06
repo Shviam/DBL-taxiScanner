@@ -45,6 +45,9 @@ public class Bruwmbruwm {
     ArrayList<Customer> customers = new ArrayList<>();
     
     public void run(){
+        /********************************************************************/
+        /* Preamble *********************************************************/
+        /********************************************************************/
         preamble_length = Integer.parseInt(input.nextLine());
         
         for (int x = 1; x < preamble_length; x++){
@@ -244,4 +247,6 @@ public class Bruwmbruwm {
         }
         return p;
     }
+    
+    
 }
