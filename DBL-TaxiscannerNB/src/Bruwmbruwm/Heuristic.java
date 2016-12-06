@@ -17,12 +17,14 @@ import java.util.Random;
  */
 public class Heuristic {
     //classes
-    NodeArray nodeArray = new NodeArray();
+    Input nodeArray = new Input();
+    
     //heuristic variables
     Node[] nodes = nodeArray.getNodeArray();
     int[][] heuristicDis;
     public int number_waypoints = 16;
-    int number_nodes = nodeArray.getNumberNodes();
+    int number_nodes = Input.number_nodes;
+    
     //initializing the waypoint array for heuristic function
     void initHeuristic(){
         //getting a random start waypoint
