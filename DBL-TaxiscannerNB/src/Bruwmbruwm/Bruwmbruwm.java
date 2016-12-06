@@ -14,34 +14,33 @@ import java.util.Stack;
  * @author s156035
  */
 public class Bruwmbruwm {
-    // Preamble variables
-    NodeArray nodeArray = new NodeArray();
-    float alpha;
-    int max_drop_off_time;
-    int number_of_taxis, seats;
-    Node[] nodes;
-    Taxi[] taxis;
-    public int number_nodes;
-    int training_time;
-    int total_time;   
+    //classes
+    Input input = new Input();
+    Output output = new Output();
+    TaxiScanner taxiscanner = TaxiScanner.getInstance();
     
+    //final variables
+    int training_time = Input.training_time;
+    int total_time = Input.total_time;
+    
+<<<<<<< HEAD
     //heuristic variables
     int[][] heuristicDis;
     public int number_waypoints = 16;
     //TaxiDistr Hueristic
     public int[] frequence;  //How often it is accessed
+=======
+    //changeable variables
+    Node[] nodes = input.getNodeArray();
+    Taxi[] taxis = input.getTaxiArray();
+    ArrayList<Customer> customers = input.getCustomerList();
+>>>>>>> origin/master
     
     //Temporary globals
     int max_distance;
     boolean ended;
-    
-    //Preamble
-    TaxiScanner input = TaxiScanner.getInstance();
-    int preamble_length;
-    
-    Output output = new Output();
-    
     String temp;
+<<<<<<< HEAD
     Astar astar = new Astar();
     
     
@@ -144,11 +143,14 @@ public class Bruwmbruwm {
         /****************************************************/
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
         /****************************************************/
+=======
+    /*
+>>>>>>> origin/master
         for (int x = training_time; x < total_time; x++){
 
             // Process clients into the arraylist
 
-            temp = input.nextLine();
+            temp = taxiscanner.nextLine();
             int whitespace = temp.indexOf(" ");
             int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
             for(int y = 0; y < amount_of_customers; y++){
@@ -163,32 +165,27 @@ public class Bruwmbruwm {
             }
             
             //Check for idle taxi
-            for(int y = 0; y < number_of_taxis; y++){
+            for(int y = 0; y < input.number_of_taxis; y++){
               if(!taxis[y].isIdle()){
                   //Take next passanger
               }
             }
         }
-    }
+    */
     
+    public void run(){
+        input.readPreamble();
+    }
     public static void main(String[] args) {
         (new Bruwmbruwm()).run();
     }
     
-    
-    /****************************************************************/
-    /* Misc Methods *************************************************/
-    /****************************************************************/
-    public boolean inBetween(int x, int lower_bound, int upper_bound){
-        return !(x < lower_bound || x > upper_bound);
-    }
-    
     //Bfs algorithm
     public void BFS(Node start_node, Node end_node, Taxi taxi){
-        for(int x = 0; x < number_nodes; x++){
-            nodes[x].distance = number_nodes;
+        for(int x = 0; x < Input.number_nodes; x++){
+            nodes[x].distance = Input.number_nodes;
         }
-        max_distance = number_nodes;
+        max_distance = Input.number_nodes;
         
         //the end and start are swapped, so the Stack doesn't go nuts
         BFSpathfinder(end_node, start_node, taxi);

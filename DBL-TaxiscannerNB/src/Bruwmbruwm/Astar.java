@@ -13,11 +13,13 @@ import java.util.Stack;
  * @author -Jur-
  */
 public class Astar {
-    
+    //classes
     Heuristic h = new Heuristic();
-    NodeArray nodeArray = new NodeArray();
+    Input nodeArray = new Input();
     
-    int number_nodes = nodeArray.getNumberNodes();
+    //final variables
+    int number_nodes = Input.number_nodes;
+    //changeable variables
     Node[] nodes = nodeArray.getNodeArray();
     
     Stack<Integer> aStar(int source, int goal){
