@@ -14,6 +14,9 @@ public class Taxi {
     int taxi_id;
     Customer served;
     Node destination;
+    int taxiPosition;
+    //Node node[];    
+    int storeDegree[];
     
     
     public void Taxi(int id){
@@ -28,7 +31,25 @@ public class Taxi {
             return false;
         }
     }
-    
+    public void neighbour(Node  currentNode){
+        int degree;
+        int large[] = new int[5];
+        int max = storeDegree[0];
+        for(int i=0;i<currentNode.position;i++){
+             degree = currentNode.neighbours[i];
+             storeDegree[i]=degree;           
+        }
+        for(int i=0;i<=storeDegree.length;i++){
+            if(max < large[i]){
+                max = storeDegree[i];
+                large[i] = max;
+            }
+        }
+        for(int j=0; j<=5;j++){
+            System.out.println("largest 5 degree"+large[j]);
+        }
+    }    
+        
     
     //Pop top of stack
     public int move(){
