@@ -115,19 +115,7 @@ public class Input {
             
             
         }
-        //TODO taxi stuff after reading preamble
-        /****************************************************/
-        /* Determine initial taxi position ******************/
-        /****************************************************/
-        input.println("c");
-        
-        /****************************************************/
-        /* Process Training Time ****************************/
-        /****************************************************/
-        for (int x = 0; x < training_time; x++){
-            input.nextLine();
-            input.println("c");
-        }}
+    }
     
     
     //Quality of life methods    
