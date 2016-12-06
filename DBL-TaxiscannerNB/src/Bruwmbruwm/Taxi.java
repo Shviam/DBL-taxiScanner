@@ -33,6 +33,9 @@ public class Taxi {
     }
       
         
+    public void assignPassenger(Customer c){
+        served = c;
+    }
     
     //Pop top of stack
     public int move(){

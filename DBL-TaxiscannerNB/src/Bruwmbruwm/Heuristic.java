@@ -26,7 +26,7 @@ public class Heuristic {
     int number_nodes = Input.number_nodes;
     
     //initializing the waypoint array for heuristic function
-    void initHeuristic(){
+    Heuristic(){
         //getting a random start waypoint
         Random rand = new Random();
         int start = rand.nextInt(number_nodes);

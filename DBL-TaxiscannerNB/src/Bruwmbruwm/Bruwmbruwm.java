@@ -33,6 +33,8 @@ public class Bruwmbruwm {
     Taxi[] taxis = input.getTaxiArray();
     ArrayList<Customer> customers = input.getCustomerList();
     
+    Queue<Customer> cus_waiting = new LinkedList<>();
+    
     //Temporary globals
     int max_distance;
     boolean ended;
@@ -85,6 +87,24 @@ public class Bruwmbruwm {
                 whitespace = temp.indexOf(" ");
                 int end_pos = Integer.parseInt(temp.substring(0, whitespace));
                 customers.add(new Customer(start_pos, end_pos));
+                cus_waiting.add(new Customer(start_pos, end_pos));
+            }
+            
+            //assign waiting customers to taxis
+            while(!cus_waiting.isEmpty()){
+                Taxi t = new Taxi();
+                boolean assigned = false;
+                for(int y = 0; y < input.number_of_taxis; y++){
+                    if(taxis[y].isIdle()){
+                        if(!assigned || astar.h.heuristic(t.taxiPosition,cus_waiting.peek().current_node) > astar.h.heuristic(taxis[y].taxiPosition, cus_waiting.peek().current_node)){
+                            t = taxis[y];
+                            assigned = true;
+                        }
+                    }
+                }
+                if(assigned){
+                    t.assignPassenger(cus_waiting.poll());
+                }
             }
             
             //Check for non-idle taxi
@@ -107,40 +127,6 @@ public class Bruwmbruwm {
         (new Bruwmbruwm()).run();
     }
     
-    //Bfs algorithm
-    public void BFS(Node start_node, Node end_node, Taxi taxi){
-        for(int x = 0; x < Input.number_nodes; x++){
-            nodes[x].distance = Input.number_nodes;
-        }
-        max_distance = Input.number_nodes;
-        
-        //the end and start are swapped, so the Stack doesn't go nuts
-        BFSpathfinder(end_node, start_node, taxi);
-        ended = false;
-    }
-    public boolean BFSpathfinder(Node current_node, Node end_node, Taxi taxi){
-        for(int x = 0; x < current_node.position; x++){
-            if (ended){
-                return false;
-            }
-            else if (current_node.neighbours[x] != end_node.position){
-                if (BFSpathfinder(nodes[current_node.neighbours[x]], end_node, taxi)){
-                    taxi.path.push(current_node.position);
-                    ended = true;
-                    return true;
-                } 
-                else{
-                    return false;
-                }
-            }
-            else{
-                max_distance = nodes[current_node.neighbours[x]].distance;
-                taxi.path.push(nodes[current_node.neighbours[x]].position);
-                return true;
-            }
-        }
-        return false;
-    }
      int storeDegree[];
       public void neighbour(Node  currentNode){
         int degree;
@@ -160,8 +146,6 @@ public class Bruwmbruwm {
             System.out.println("largest 5 degree"+large[j]);
         }
     }
-    
-    
     
     public void weighPaths(Customer passenger){
         Stack<Integer> path = astar.aStar(passenger.current_node, passenger.goal_node);
