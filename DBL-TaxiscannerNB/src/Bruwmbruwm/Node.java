@@ -15,9 +15,6 @@ class Node{
     int i = 0;
     int position;
     
-    //TaxiDistr Hueristic
-    int frequence;  //How often it is accessed
-    
     //needed for A star search
     int distance;
     int fscore;

@@ -28,6 +28,8 @@ public class Bruwmbruwm {
     //heuristic variables
     int[][] heuristicDis;
     public int number_waypoints = 16;
+    //TaxiDistr Hueristic
+    public int[] frequence;  //How often it is accessed
     
     //Temporary globals
     int max_distance;
@@ -40,6 +42,7 @@ public class Bruwmbruwm {
     Output output = new Output();
     
     String temp;
+    Astar astar = new Astar();
     
     
     ArrayList<Customer> customers = new ArrayList<>();
@@ -77,6 +80,7 @@ public class Bruwmbruwm {
                     number_nodes = Integer.parseInt(input.nextLine());
                     nodeArray.setNumberNodes(number_nodes);
                     nodes = new Node[number_nodes];
+                    frequence = new int[number_nodes];
                     for(int y = 0; y < number_nodes; y++){
                         nodes[y] = new Node(y);
                     }
@@ -120,7 +124,21 @@ public class Bruwmbruwm {
         /* Process Training Time ****************************/
         /****************************************************/
         for (int x = 0; x < training_time; x++){
-            input.nextLine();
+            temp = input.nextLine();
+            int whitespace = temp.indexOf(" ");
+            int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
+            for(int y = 0; y < amount_of_customers; y++){
+                temp = temp.substring(whitespace);
+                whitespace = temp.indexOf(" ");
+                int start_pos = Integer.parseInt(temp.substring(0, whitespace));
+                
+                temp = temp.substring(whitespace);
+                whitespace = temp.indexOf(" ");
+                int end_pos = Integer.parseInt(temp.substring(0, whitespace));
+                
+                //Look at the path the customer will take and assign weight to the nodes along it
+                weighPaths(new Customer(start_pos, end_pos));
+            }
             input.println("c");
         }
         /****************************************************/
@@ -200,6 +218,24 @@ public class Bruwmbruwm {
     
     
     
-
+    public void weighPaths(Customer passenger){
+        Stack<Integer> path = astar.aStar(passenger.current_node, passenger.goal_node);
+        while(!path.isEmpty()){
+            frequence[path.pop()]++;
+        }
+    }
+    public int[] getHighestFreq(int amount){
+        int[] out = new int[amount];
+        for(int x = 0; x < amount; x++){
+            int highest = 0;
+            for(int y = 0; y < number_nodes; y++){
+                if(frequence[y] > highest){
+                    highest = frequence[y];
+                }
+            }
+            out[x] = highest;
+        }
+        return out;
+    }
     
 }
