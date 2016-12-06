@@ -103,7 +103,10 @@ public class Bruwmbruwm {
                     }
                 }
                 if(assigned){
-                    t.assignPassenger(cus_waiting.poll());
+                    t.served = cus_waiting.poll();
+                    t.path = astar.aStar(t.taxiPosition, t.served.current_node);
+                } else {
+                    break;
                 }
             }
             
