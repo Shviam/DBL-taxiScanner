@@ -9,6 +9,11 @@ import java.util.Stack;
  *
  * @author s156035
  */
+
+enum State {
+    IDLE, PICK, DROP
+}
+
 public class Taxi {
     Stack<Integer> path = new Stack();
     int taxi_id;
@@ -18,10 +23,11 @@ public class Taxi {
     //Node node[];    
     int storeDegree[];
     String function;
+    State f;
     
     public void Taxi(int id){
         taxi_id = id;
-        ;
+        this.f = State.IDLE;
     }
     
     public boolean isIdle (){
