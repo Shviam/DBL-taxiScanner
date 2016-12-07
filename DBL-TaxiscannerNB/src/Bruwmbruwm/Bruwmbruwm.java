@@ -46,7 +46,7 @@ public class Bruwmbruwm {
         /* Read preamble ************************************/
         /****************************************************/
         input.readPreamble();
-        astar = new Astar();
+        astar = new Astar(input);
         taxiscanner.println("c");
         
         /****************************************************/

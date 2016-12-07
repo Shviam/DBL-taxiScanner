@@ -14,13 +14,18 @@ import java.util.Stack;
  */
 public class Astar {
     //classes
-    Heuristic h = new Heuristic();
-    Input nodeArray = new Input();
+    Heuristic h;
+    Input nodeArray;
     
     //final variables
     int number_nodes = Input.number_nodes;
     //changeable variables
     Node[] nodes = nodeArray.getNodeArray();
+    
+    Astar(Input in){
+        this.nodeArray = in;
+        this.h = new Heuristic(in);
+    }
     
     Stack<Integer> aStar(int source, int goal){
         PriorityQueue<NodeDist> Q = new PriorityQueue<>();

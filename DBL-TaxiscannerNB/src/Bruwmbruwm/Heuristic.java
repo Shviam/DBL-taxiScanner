@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class Heuristic {
     //classes
-    Input nodeArray = new Input();
+    Input nodeArray;
     
     
     //heuristic variables
@@ -27,8 +27,10 @@ public class Heuristic {
     int number_nodes = Input.number_nodes;
     
     //initializing the waypoint array for heuristic function
-    Heuristic(){
+    Heuristic(Input in){
         //getting a random start waypoint
+        this.nodeArray = in;
+        
         Random rand = new Random();
         int start = rand.nextInt(number_nodes);
         
