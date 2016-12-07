@@ -190,31 +190,40 @@ public class Bruwmbruwm {
             System.out.println("largest 5 degree"+large[j]);
         }
     } 
-    String function;
-     public void doFunction(Taxi t, int Id){
+    
+    public void doFunction(Taxi t, int Id){
          //Will do the function the taxi is set to do
-         switch (function){
+         switch (t.function){
              case "PICK":
                  //Pick up the passenger at the current node
                  //And determine the path from the current node to the destination
                  output.pickUpPassenger(Id, t.served.goal_node);
                  t.path = astar.aStar(t.taxiPosition, t.served.goal_node);
-                 function = "DROP";
+                 t.function = "DROP";
+                 return;
                     
              case "DROP":
                  //Drop off the passenger
                  output.dropOffPassenger(Id, t.served.goal_node);
-                 returnToHotspot();
+                 returnToHotspot(t);
+                 return;
                  
              case "IDLE":
                  //do nothing wait for instructions
-             break;
+                 return;
+                 
+             default:
+                 return;
          }   
      }
      
-     public void returnToHotspot(){
+     public void returnToHotspot(Taxi t){
+         int min_distance = Integer.MAX_VALUE;
          for(int x = 0; x < 1/*number of hotspots*/; x++){
-             if 
+             if (astar.h.heuristic(t.taxiPosition, 1/*hotspotlocation*/) < min_distance){
+                 min_distance = astar.h.heuristic(t.taxiPosition, 1/*hotspotlocation*/);
+             }
          }
+         taxi.path = 
      }
 }
