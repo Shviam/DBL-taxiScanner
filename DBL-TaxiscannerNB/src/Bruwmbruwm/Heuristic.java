@@ -19,6 +19,7 @@ public class Heuristic {
     //classes
     Input nodeArray = new Input();
     
+    
     //heuristic variables
     Node[] nodes = nodeArray.getNodeArray();
     int[][] heuristicDis;

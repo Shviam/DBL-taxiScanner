@@ -39,12 +39,14 @@ public class Bruwmbruwm {
     int max_distance;
     boolean ended;
     String temp;
-    Astar astar = new Astar();
+    Astar astar;
     
     public void run(){
         /****************************************************/
-        /* Determine initial taxi position ******************/
+        /* Read preamble ************************************/
         /****************************************************/
+        input.readPreamble();
+        astar = new Astar();
         taxiscanner.println("c");
         
         /****************************************************/
@@ -99,6 +101,7 @@ public class Bruwmbruwm {
                         if(!assigned || astar.h.heuristic(t.taxiPosition,cus_waiting.peek().current_node) > astar.h.heuristic(taxis[y].taxiPosition, cus_waiting.peek().current_node)){
                             t = taxis[y];
                             assigned = true;
+                            
                         }
                     }
                 }
@@ -191,5 +194,11 @@ public class Bruwmbruwm {
      public void doFunction(){
          //Will do the function the taxi is set to do
          
+     }
+     
+     public void returnToHotspot(){
+         for(int x = 0; x < 1/*number of hotspots*/; x++){
+             if 
+         }
      }
 }

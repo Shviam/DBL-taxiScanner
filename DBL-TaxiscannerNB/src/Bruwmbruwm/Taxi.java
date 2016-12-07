@@ -17,14 +17,15 @@ public class Taxi {
     int taxiPosition;
     //Node node[];    
     int storeDegree[];
-    
+    String function;
     
     public void Taxi(int id){
         taxi_id = id;
+        ;
     }
     
     public boolean isIdle (){
-        if(destination != null){
+        if(function.equals("idle")){
             return true;
         }
         else{
