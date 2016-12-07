@@ -30,12 +30,7 @@ public class Taxi {
     }
     
     public boolean isIdle (){
-        if(function.compareTo(IDLE)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return function == State.IDLE;
     }
     
     //Pop top of stack
