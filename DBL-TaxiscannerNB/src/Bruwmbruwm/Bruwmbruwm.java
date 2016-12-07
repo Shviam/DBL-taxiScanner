@@ -189,7 +189,7 @@ public class Bruwmbruwm {
         for(int j=0; j<=5;j++){
             System.out.println("largest 5 degree"+large[j]);
         }
-    } 
+    }
     
     public void doFunction(Taxi t, int Id){
          //Will do the function the taxi is set to do
