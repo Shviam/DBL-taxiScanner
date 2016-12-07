@@ -193,21 +193,21 @@ public class Bruwmbruwm {
     public void doFunction(Taxi t, int Id){
          //Will do the function the taxi is set to do
          switch (t.function){
-             case "PICK":
+             case PICK:
                  //Pick up the passenger at the current node
                  //And determine the path from the current node to the destination
                  output.pickUpPassenger(Id, t.served.goal_node);
                  t.path = astar.aStar(t.taxiPosition, t.served.goal_node);
-                 t.function = "DROP";
+                 t.function = State.DROP;
                  return;
                     
-             case "DROP":
+             case DROP:
                  //Drop off the passenger
                  output.dropOffPassenger(Id, t.served.goal_node);
                  returnToHotspot(t);
                  return;
                  
-             case "IDLE":
+             case IDLE:
                  //do nothing wait for instructions
                  return;
                  
@@ -226,7 +226,7 @@ public class Bruwmbruwm {
              }
          }
          t.path = astar.aStar(t.taxiPosition, nearest.node.position);
-         t.function = "idle";
+         t.function = State.IDLE;
          return;
      }
 }

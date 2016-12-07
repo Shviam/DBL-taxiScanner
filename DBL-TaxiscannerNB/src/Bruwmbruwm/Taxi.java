@@ -22,16 +22,15 @@ public class Taxi {
     int taxiPosition;
     //Node node[];    
     int storeDegree[];
-    String function;
-    State f;
+    State function;
     
     public void Taxi(int id){
         taxi_id = id;
-        this.f = State.IDLE;
+        this.function = State.IDLE;
     }
     
     public boolean isIdle (){
-        if(function.equals("idle")){
+        if(function.compareTo(IDLE)){
             return true;
         }
         else{
