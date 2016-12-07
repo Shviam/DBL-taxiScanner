@@ -30,7 +30,7 @@ public class Taxi {
     }
     
     public boolean isIdle (){
-        if(function.compareTo(IDLE)){
+        if(function.equals(State.IDLE)){
             return true;
         }
         else{
