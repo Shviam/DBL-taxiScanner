@@ -96,7 +96,7 @@ public class Bruwmbruwm {
             while(!cus_waiting.isEmpty()){
                 Taxi t = new Taxi();
                 boolean assigned = false;
-                for(int y = 0; y < input.number_of_taxis; y++){
+                for(int y = 0; y < Input.number_of_taxis; y++){
                     if(taxis[y].isIdle()){
                         if(!assigned || astar.h.heuristic(t.taxiPosition,cus_waiting.peek().current_node) > astar.h.heuristic(taxis[y].taxiPosition, cus_waiting.peek().current_node)){
                             t = taxis[y];
@@ -114,14 +114,14 @@ public class Bruwmbruwm {
             }
             
             //Check for non-idle taxi
-            for(int y = 0; y < input.number_of_taxis; y++){
+            for(int y = 0; y < Input.number_of_taxis; y++){
               if(!taxis[y].isIdle()){
                   if(!taxis[y].path.isEmpty()){
                     taxis[y].taxiPosition = taxis[y].path.pop();
                     output.taxiGoTo(y, taxis[y].taxiPosition);
                   }
                   else{
-                      doFunction();
+                      doFunction(taxis[y], y);
                   }
               }
             }
@@ -190,10 +190,26 @@ public class Bruwmbruwm {
             System.out.println("largest 5 degree"+large[j]);
         }
     } 
-    
-     public void doFunction(){
+    String function;
+     public void doFunction(Taxi t, int Id){
          //Will do the function the taxi is set to do
-         
+         switch (function){
+             case "PICK":
+                 //Pick up the passenger at the current node
+                 //And determine the path from the current node to the destination
+                 output.pickUpPassenger(Id, t.served.goal_node);
+                 t.path = astar.aStar(t.taxiPosition, t.served.goal_node);
+                 function = "DROP";
+                    
+             case "DROP":
+                 //Drop off the passenger
+                 output.dropOffPassenger(Id, t.served.goal_node);
+                 returnToHotspot();
+                 
+             case "IDLE":
+                 //do nothing wait for instructions
+             break;
+         }   
      }
      
      public void returnToHotspot(){
