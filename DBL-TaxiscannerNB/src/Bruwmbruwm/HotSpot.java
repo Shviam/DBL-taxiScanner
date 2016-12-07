@@ -13,7 +13,10 @@ public class HotSpot {
     Node node;
     HotSpot(Node node){
         this.node=node;
-        int HotSpot[] = new int[5];
-        
+        int HotSpot[];
+        for(int i=1;i<=10;i++){
+             HotSpot = new int[i];
+             
+        }
     }   
 }
