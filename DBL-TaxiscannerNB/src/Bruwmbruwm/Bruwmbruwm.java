@@ -1,12 +1,8 @@
 package Bruwmbruwm;
 
-import static java.lang.Integer.max;
 import java.util.ArrayList;
-import static java.util.Arrays.fill;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -20,20 +16,13 @@ public class Bruwmbruwm {
     Output output = new Output();
     TaxiScanner taxiscanner = TaxiScanner.getInstance();
     
-    //final variables
-    int training_time = Input.training_time;
-    int total_time = Input.total_time;
-    
-    //heuristic variables
-    int[][] heuristicDis;
-    public int number_waypoints = 16;
-    //TaxiDistr Hueristic
+    //initialize variables
+    int training_time;
+    int total_time;
     public int[] frequence;  //How often it is accessed
-    //changeable variables
-    Node[] nodes = input.getNodeArray();
-    Taxi[] taxis = input.getTaxiArray();
-    ArrayList<Customer> customers = input.getCustomerList();
-    
+    Node[] nodes;
+    Taxi[] taxis;
+    ArrayList<Customer> customers;
     Queue<Customer> cus_waiting = new LinkedList<>();
     
     //Temporary globals
@@ -47,6 +36,10 @@ public class Bruwmbruwm {
         /* Read preamble ************************************/
         /****************************************************/
         input.readPreamble();
+        Taxi[] taxis = input.getTaxiArray();
+        training_time = Input.training_time;
+        total_time = Input.total_time;
+        customers = input.getCustomerList();
         astar = new Astar(input);
         taxiscanner.println("c");
         

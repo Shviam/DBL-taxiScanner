@@ -26,30 +26,30 @@ public class Input {
     public static int training_time;
     public static int total_time;
     public static int preamble_length;
-    // Changeable Preamble variables
-    private Node[] nodes;
-    private Taxi[] taxis;
-    String temp;
-    private ArrayList<Customer> customers = new ArrayList<>();
+    public static Node[] nodes;
+    public static Taxi[] taxis;
+    public static ArrayList<Customer> customers = new ArrayList<>();
+    
+        String temp;
     
     // Methods to get changeable variables, after updating use the set method so it is updated in all classes
     public ArrayList<Customer> getCustomerList(){
         return customers;
     }
     public void setCustomerList(ArrayList<Customer> customers){
-        this.customers = customers;
+        Input.customers = customers;
     }
     public Taxi[] getTaxiArray(){
         return taxis;
     }
     public void setTaxiArray(Taxi[] taxis){
-        this.taxis = taxis;
+        Input.taxis = taxis;
     }
     public Node[] getNodeArray(){
         return nodes;
     }
     public void setNodeArray(Node[] nodes){
-        this.nodes = nodes;
+        Input.nodes = nodes;
     }
     
     //Read the preamble and set the corresponding variables
@@ -104,7 +104,7 @@ public class Input {
                     temp = temp.substring(end+1, temp.length());
 
                     nodes[x-5].write_neighbour(neighbour);
-                };       
+                }     
             }
             if(x == 4+number_nodes){
                 temp = input.nextLine();
