@@ -14,6 +14,7 @@ import java.util.Stack;
  * @author s156035
  */
 public class Bruwmbruwm {
+    HotSpot[] hotspots;
     //classes
     Input input = new Input();
     Output output = new Output();
@@ -115,15 +116,13 @@ public class Bruwmbruwm {
             
             //Check for non-idle taxi
             for(int y = 0; y < Input.number_of_taxis; y++){
-              if(!taxis[y].isIdle()){
-                  if(!taxis[y].path.isEmpty()){
-                    taxis[y].taxiPosition = taxis[y].path.pop();
-                    output.taxiGoTo(y, taxis[y].taxiPosition);
-                  }
-                  else{
-                      doFunction(taxis[y], y);
-                  }
-              }
+                if(!taxis[y].path.isEmpty()){
+                  taxis[y].taxiPosition = taxis[y].path.pop();
+                  output.taxiGoTo(y, taxis[y].taxiPosition);
+                }
+                else if(!taxis[y].isIdle()){
+                    doFunction(taxis[y], y);
+                }
             }
             output.sendOutput();
         }
@@ -219,11 +218,15 @@ public class Bruwmbruwm {
      
      public void returnToHotspot(Taxi t){
          int min_distance = Integer.MAX_VALUE;
+         HotSpot nearest = hotspots[1];
          for(int x = 0; x < 1/*number of hotspots*/; x++){
              if (astar.h.heuristic(t.taxiPosition, 1/*hotspotlocation*/) < min_distance){
                  min_distance = astar.h.heuristic(t.taxiPosition, 1/*hotspotlocation*/);
+                 nearest = hotspots[x];
              }
          }
-         taxi.path = 
+         t.path = astar.aStar(t.taxiPosition, nearest.node.position);
+         t.function = "idle";
+         return;
      }
 }
