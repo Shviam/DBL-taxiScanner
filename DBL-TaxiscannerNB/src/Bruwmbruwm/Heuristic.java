@@ -19,17 +19,18 @@ public class Heuristic {
     //classes
     Input nodeArray;
     
-    
     //heuristic variables
-    Node[] nodes = nodeArray.getNodeArray();
+    Node[] nodes;
     int[][] heuristicDis;
     public int number_waypoints = 16;
-    int number_nodes = Input.number_nodes;
+    int number_nodes;
     
     //initializing the waypoint array for heuristic function
     Heuristic(Input in){
         //getting a random start waypoint
         this.nodeArray = in;
+        nodes = nodeArray.getNodeArray();
+        number_nodes = Input.number_nodes;
         
         Random rand = new Random();
         int start = rand.nextInt(number_nodes);
