@@ -10,8 +10,12 @@ package Bruwmbruwm;
  *
  * @author s156035
  */
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Singleton class that manages IO for the Taxi Scheduling project for DBL Algorithms Q2 2016/2017. Enforces proper

@@ -30,13 +30,11 @@ class Node{
     //initialise the array with the amount of edges specified in the Preamble
     public void initialise(int di){		
         neighbours = new int[di];
-        return;
     }
 
     //Add an edge to the neighbours
     public void write_neighbour(int neighbour){		
         neighbours[di] = neighbour;
-        di++;						//increse index
-        return;
+        di++;		
     }
 }

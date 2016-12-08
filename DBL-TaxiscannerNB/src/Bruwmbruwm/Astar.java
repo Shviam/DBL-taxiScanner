@@ -20,11 +20,12 @@ public class Astar {
     //final variables
     int number_nodes = Input.number_nodes;
     //changeable variables
-    Node[] nodes = nodeArray.getNodeArray();
+    Node[] nodes;
     
     Astar(Input in){
         this.nodeArray = in;
         this.h = new Heuristic(in);
+        nodes = nodeArray.getNodeArray();
     }
     
     Stack<Integer> aStar(int source, int goal){
