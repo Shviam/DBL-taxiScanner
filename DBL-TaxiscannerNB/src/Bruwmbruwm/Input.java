@@ -74,7 +74,7 @@ public class Input {
                     
                     taxis = new Taxi[number_of_taxis];
                     for(int y = 0; y < number_of_taxis; y++){
-                        taxis[y] = new Taxi();
+                        taxis[y] = new Taxi(y);
                     }
                     
                     seats = Integer.parseInt(temp.substring(whitespace+1, temp.length()));

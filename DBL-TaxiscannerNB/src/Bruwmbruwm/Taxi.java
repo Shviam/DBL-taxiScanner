@@ -24,7 +24,7 @@ public class Taxi {
     int storeDegree[];
     State function;
     
-    public void Taxi(int id){
+    public Taxi(int id){
         taxi_id = id;
         this.function = State.IDLE;
     }

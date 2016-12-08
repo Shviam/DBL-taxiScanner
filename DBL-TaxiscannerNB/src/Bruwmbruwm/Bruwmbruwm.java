@@ -22,7 +22,7 @@ public class Bruwmbruwm {
     //initialize variables
     int training_time;
     int total_time;
-    public int[] frequence;  //How often it is accessed
+    public int[] frequence;  //How often a node (sorted by index) is accessed
     Node[] nodes;
     Taxi[] taxis;
     Queue<Customer> cus_waiting = new LinkedList<>();
@@ -35,15 +35,11 @@ public class Bruwmbruwm {
     Astar astar;
 
     public void run() {
-        /**
-         * *************************************************
-         */
+        /****************************************************/
         /* Read preamble ************************************/
-        /**
-         * *************************************************
-         */
+        /****************************************************/
         input.readPreamble();
-        Taxi[] taxis = input.getTaxiArray();
+        taxis = input.getTaxiArray();
         for (Taxi taxi : taxis) {
             taxi_idle.add(taxi);
         }
@@ -51,69 +47,95 @@ public class Bruwmbruwm {
         total_time = Input.total_time;
         astar = new Astar(input);
         taxiscanner.println("c");
+        frequence = new int[input.number_nodes];
 
-        /**
-         * *************************************************
-         */
+        /****************************************************/
         /* Process Training Time ****************************/
-        /**
-         * *************************************************
-         */
+        /****************************************************/
         for (int x = 0; x < training_time; x++) {
             temp = taxiscanner.nextLine();
             int whitespace = temp.indexOf(" ");
-            int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
+            int amount_of_customers;
+            if(whitespace != -1){
+                amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
+            }
+            else{
+                amount_of_customers = Integer.parseInt(temp.substring(0, temp.length()));
+            }
             for (int y = 0; y < amount_of_customers; y++) {
-                temp = temp.substring(whitespace);
+                int end_pos;
+                int start_pos;
+                temp = temp.substring(whitespace + 1);
                 whitespace = temp.indexOf(" ");
-                int start_pos = Integer.parseInt(temp.substring(0, whitespace));
+                start_pos = Integer.parseInt(temp.substring(0, whitespace));
 
-                temp = temp.substring(whitespace);
+                temp = temp.substring(whitespace + 1);
                 whitespace = temp.indexOf(" ");
-                int end_pos = Integer.parseInt(temp.substring(0, whitespace));
+                
+                if(whitespace != -1){
+                    end_pos = Integer.parseInt(temp.substring(0, whitespace));
+                }
+                else{
+                    end_pos = Integer.parseInt(temp.substring(0, temp.length()));
+                }
 
                 //Look at the path the customer will take and assign weight to the nodes along it
                 weighPaths(new Customer(start_pos, end_pos));
             }
             taxiscanner.println("c");
         }
-        /**
-         * *************************************************
-         */
+        /****************************************************/
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
-        /**
-         * *************************************************
-         */
+        /****************************************************/
+        
+        //Distribute taxis
+        distributeTaxis();
+        
         for (int x = training_time; x < total_time; x++) {
 
             // Process clients into the arraylist
             temp = taxiscanner.nextLine();
             int whitespace = temp.indexOf(" ");
-            int amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
+            int amount_of_customers;
+            if(whitespace != -1){
+                amount_of_customers = Integer.parseInt(temp.substring(0, whitespace));
+            }
+            else{
+                amount_of_customers = Integer.parseInt(temp.substring(0, temp.length()));
+            }
             for (int y = 0; y < amount_of_customers; y++) {
-                temp = temp.substring(whitespace);
+                int end_pos;
+                int start_pos;
+                temp = temp.substring(whitespace + 1);
                 whitespace = temp.indexOf(" ");
-                int start_pos = Integer.parseInt(temp.substring(0, whitespace));
+                start_pos = Integer.parseInt(temp.substring(0, whitespace));
 
-                temp = temp.substring(whitespace);
+                temp = temp.substring(whitespace + 1);
                 whitespace = temp.indexOf(" ");
-                int end_pos = Integer.parseInt(temp.substring(0, whitespace));
+                
+                if(whitespace != -1){
+                    end_pos = Integer.parseInt(temp.substring(0, whitespace));
+                }
+                else{
+                    end_pos = Integer.parseInt(temp.substring(0, temp.length()));
+                }
                 cus_waiting.add(new Customer(start_pos, end_pos));
             }
-
+            /*
             //assign waiting customers to taxis
             assignCustomer();
 
             //Check for non-idle taxi
             checkTaxis();
 
-        }
-        while (taxi_idle.size() < Input.number_of_taxis) {
-            //assign waiting customers to taxis
-            assignCustomer();
-
-            //Check for non-idle taxi
-            checkTaxis();
+            }*/
+            while (taxi_idle.size() < Input.number_of_taxis) {
+                //assign waiting customers to taxis
+                assignCustomer();
+                
+            }
+            processMoves();
+            output.sendOutput();
         }
     }
 
@@ -126,7 +148,7 @@ public class Bruwmbruwm {
         while (!cus_waiting.isEmpty()) {
             ListIterator<Taxi> it = taxi_idle.listIterator();
             ListIterator<Taxi> max = taxi_idle.listIterator();
-            Taxi t = new Taxi();
+            Taxi t = new Taxi(1); //The initialisation is just a dmmy so the code doesn't complain. It's a feature.
             boolean assigned = false;
             if (it.hasNext()) {
                 t = it.next();
@@ -151,7 +173,7 @@ public class Bruwmbruwm {
         }
     }
 
-    void checkTaxis() {
+    void processMoves() {
         for (int y = 0; y < Input.number_of_taxis; y++) {
             if (!taxis[y].path.isEmpty()) {
                 taxis[y].taxiPosition = taxis[y].path.pop();
@@ -160,7 +182,6 @@ public class Bruwmbruwm {
                 doFunction(taxis[y], y);
             }
         }
-        output.sendOutput();
     }
 
     public void weighPaths(Customer passenger) {
@@ -184,18 +205,19 @@ public class Bruwmbruwm {
         }
         return out;
     }
-    int storeDegree[] = new int[Input.number_nodes];
+    
 
     public int[] getHighestDegree(int degreeNumber) {
+        int storeDegree[] = new int[input.number_nodes];
         int degree;
 
         int index ;
         int large[] = new int[5];
         int max;
-        for(int i=0;i<Input.number_nodes;i++){
-            storeDegree[i] = nodes[i].di;           
+        for(int i=0;i<input.number_nodes;i++){
+            storeDegree[i] = input.nodes[i].di;           
         }
-        for(int j=1; j<=5;j++){
+        for(int j=0; j<5;j++){
             max = storeDegree[0];
             index = 0;
             for(int i=0;i < storeDegree.length;i++){
@@ -213,14 +235,14 @@ public class Bruwmbruwm {
     public void hotSpotFreq() {
         int[] hotspotindices = getHighestFreq(5);
         for (int i = 0; i < 5; i++) {
-            hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
+            hotspots[i] = new HotSpot(input.nodes[hotspotindices[i]]);
         }
     }
 
     public void hotSpotDegree() {
         int[] hotspotindices = getHighestDegree(5);
         for (int i = 5; i < 10; i++) {
-            hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
+            hotspots[i] = new HotSpot(input.nodes[hotspotindices[i-5]]);
         }
     }
 
@@ -259,5 +281,15 @@ public class Bruwmbruwm {
         t.path = astar.aStar(t.taxiPosition, nearest.node.position);
         t.function = State.IDLE;
         taxi_idle.add(t);
+    }
+    
+    public void distributeTaxis(){
+        //Establish hotspots
+        hotSpotFreq();
+        hotSpotDegree();
+        
+        for(int x = 0; x < input.number_of_taxis; x++){
+            taxis[x].taxiPosition = hotspots[x%10].node.position;
+        }
     }
 }

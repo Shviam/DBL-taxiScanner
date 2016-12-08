@@ -15,6 +15,8 @@ class Node{
     public int di = 0; //amount of neighbour
     int position;
     
+    int frequence = 0;
+    
     //needed for A star search
     int distance;
     int fscore;
