@@ -160,19 +160,23 @@ public class Bruwmbruwm {
      int storeDegree[] = new int[Input.number_nodes];
      public int[] getHighestDegree(int degreeNumber){
         int degree;
+        int index ;
         int large[] = new int[5];
-        int max = storeDegree[0];
+        int max;
         for(int i=0;i<Input.number_nodes;i++){
-            storeDegree[i] = degreeNumber;           
+            storeDegree[i] = nodes[i].di;           
         }
-        for(int i=0;i<=storeDegree.length;i++){
-            if(max < large[i]){
-                max = storeDegree[i];
-                large[i] = max;
+        for(int j=1; j<=5;j++){
+            max = storeDegree[0];
+            index = 0;
+            for(int i=0;i < storeDegree.length;i++){
+                if(max < storeDegree[i]){
+                    max = storeDegree[i];
+                    index = i;
+                }
             }
-        }
-        for(int j=0; j<=5;j++){
-            System.out.println("largest 5 degree"+large[j]);
+            large[j] = max;
+            storeDegree[index]= Integer.MIN_VALUE;
         }
         return large;
     }
