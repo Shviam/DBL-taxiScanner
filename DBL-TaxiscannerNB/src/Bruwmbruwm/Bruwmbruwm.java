@@ -2,6 +2,7 @@ package Bruwmbruwm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -24,6 +25,7 @@ public class Bruwmbruwm {
     Taxi[] taxis;
     ArrayList<Customer> customers;
     Queue<Customer> cus_waiting = new LinkedList<>();
+    LinkedList<Taxi> taxi_idle = new LinkedList<>();
     
     //Temporary globals
     int max_distance;
@@ -37,6 +39,9 @@ public class Bruwmbruwm {
         /****************************************************/
         input.readPreamble();
         Taxi[] taxis = input.getTaxiArray();
+        for (Taxi taxi : taxis) {
+            taxi_idle.add(taxi);
+        }
         training_time = Input.training_time;
         total_time = Input.total_time;
         customers = input.getCustomerList();
@@ -88,20 +93,27 @@ public class Bruwmbruwm {
             
             //assign waiting customers to taxis
             while(!cus_waiting.isEmpty()){
+                ListIterator<Taxi> it = taxi_idle.listIterator();
+                ListIterator<Taxi> max = taxi_idle.listIterator();
                 Taxi t = new Taxi();
                 boolean assigned = false;
-                for(int y = 0; y < Input.number_of_taxis; y++){
-                    if(taxis[y].isIdle()){
-                        if(!assigned || astar.h.heuristic(t.taxiPosition,cus_waiting.peek().current_node) > astar.h.heuristic(taxis[y].taxiPosition, cus_waiting.peek().current_node)){
-                            t = taxis[y];
-                            assigned = true;
-                            
-                        }
+                if(it.hasNext()){
+                    t = it.next();
+                    max = it;
+                    assigned = true;
+                }
+                while(it.hasNext()) {
+                    Taxi s = it.next();
+                    if (astar.h.heuristic(t.taxiPosition, cus_waiting.peek().current_node) > astar.h.heuristic(s.taxiPosition, cus_waiting.peek().current_node)) {
+                        t = s;
+                        max = it;
                     }
                 }
-                if(assigned){
+                if (assigned){
                     t.served = cus_waiting.poll();
                     t.path = astar.aStar(t.taxiPosition, t.served.current_node);
+                    t.function = State.PICK;
+                    max.remove();
                 } else {
                     break;
                 }
@@ -220,6 +232,7 @@ public class Bruwmbruwm {
          }
          t.path = astar.aStar(t.taxiPosition, nearest.node.position);
          t.function = State.IDLE;
+         taxi_idle.add(t);
          return;
      }
 }
