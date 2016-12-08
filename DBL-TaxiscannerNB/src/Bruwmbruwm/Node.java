@@ -12,7 +12,7 @@ package Bruwmbruwm;
 class Node{
     private Node[] nodes;
     int[] neighbours;
-    int di = 0;
+    int di = 0; //amount of neighbour
     int position;
     
     //needed for A star search

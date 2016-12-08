@@ -11,7 +11,8 @@ import java.util.Stack;
  * @author s156035
  */
 public class Bruwmbruwm {
-    HotSpot[] hotspots;
+    HotSpot[] hotspots = new HotSpot[10];
+    //HotSpot[] hotspots2 = new HotSpot[10];
     //classes
     Input input = new Input();
     Output output = new Output();
@@ -137,26 +138,6 @@ public class Bruwmbruwm {
         (new Bruwmbruwm()).run();
     }
     
-     int storeDegree[];
-      public void neighbour(Node  currentNode){
-        int degree;
-        int large[] = new int[5];
-        int max = storeDegree[0];
-        for(int i=0;i<currentNode.position;i++){
-             degree = currentNode.neighbours[i];
-             storeDegree[i]=degree;           
-        }
-        for(int i=0;i<=storeDegree.length;i++){
-            if(max < large[i]){
-                max = storeDegree[i];
-                large[i] = max;
-            }
-        }
-        for(int j=0; j<=5;j++){
-            System.out.println("largest 5 degree"+large[j]);
-        }
-    }
-    
     public void weighPaths(Customer passenger){
         Stack<Integer> path = astar.aStar(passenger.current_node, passenger.goal_node);
         while(!path.isEmpty()){
@@ -176,13 +157,13 @@ public class Bruwmbruwm {
         }
         return out;
     }
-     public void highestDegree(Node  currentNode){
+     int storeDegree[] = new int[Input.number_nodes];
+     public int[] getHighestDegree(int degreeNumber){
         int degree;
         int large[] = new int[5];
         int max = storeDegree[0];
-        for(int i=0;i<currentNode.position;i++){
-             degree = currentNode.neighbours[i];
-             storeDegree[i]=degree;           
+        for(int i=0;i<Input.number_nodes;i++){
+            storeDegree[i] = degreeNumber;           
         }
         for(int i=0;i<=storeDegree.length;i++){
             if(max < large[i]){
@@ -193,7 +174,22 @@ public class Bruwmbruwm {
         for(int j=0; j<=5;j++){
             System.out.println("largest 5 degree"+large[j]);
         }
+        return large;
     }
+     
+     public void hotSpotFreq(){
+         int[] hotspotindices = getHighestFreq(5);                
+         for(int i=0;i<5;i++){
+             hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
+         }
+     }
+     
+     public void hotSpotDegree(){
+         int [] hotspotindices = getHighestDegree(5);
+         for(int i=5;i<10;i++){
+             hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
+         }
+     }
     
     public void doFunction(Taxi t, int Id){
          //Will do the function the taxi is set to do
