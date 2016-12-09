@@ -129,7 +129,7 @@ public class Bruwmbruwm {
             checkTaxis();
 
             }*/
-            while (taxi_idle.size() < Input.number_of_taxis) {
+            while (taxi_idle.size() != 0) {
                 //assign waiting customers to taxis
                 assignCustomer();
                 
@@ -147,26 +147,29 @@ public class Bruwmbruwm {
     void assignCustomer() {
         while (!cus_waiting.isEmpty()) {
             ListIterator<Taxi> it = taxi_idle.listIterator();
-            ListIterator<Taxi> max = taxi_idle.listIterator();
-            Taxi t = new Taxi(1); //The initialisation is just a dmmy so the code doesn't complain. It's a feature.
+            //ListIterator<Taxi> max = taxi_idle.listIterator();
+            Taxi t = new Taxi(1); //The initialisation is just a dummy so the code doesn't complain. It's a feature.
             boolean assigned = false;
             if (it.hasNext()) {
                 t = it.next();
-                max = it;
+                it.remove();
+                //max = it;
                 assigned = true;
             }
             while (it.hasNext()) {
                 Taxi s = it.next();
                 if (astar.h.heuristic(t.taxiPosition, cus_waiting.peek().current_node) > astar.h.heuristic(s.taxiPosition, cus_waiting.peek().current_node)) {
+                    it.remove();
+                    it.add(t);
                     t = s;
-                    max = it;
+                    //max = it;
                 }
             }
             if (assigned) {
                 t.served = cus_waiting.poll();
                 t.path = astar.aStar(t.taxiPosition, t.served.current_node);
                 t.function = State.PICK;
-                max.remove();
+                //max.remove();
             } else {
                 break;
             }
