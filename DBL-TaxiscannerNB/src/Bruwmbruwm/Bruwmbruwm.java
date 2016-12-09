@@ -93,8 +93,8 @@ public class Bruwmbruwm {
         //Distribute taxis
         distributeTaxis();
         
-        //for (int x = training_time; x < total_time; x++) {
-        while(taxiscanner.hasNextLine()){
+        for (int x = training_time; x < total_time; x++) {
+        //while(taxiscanner.hasNextLine()){
             
             // Process clients into the arraylist
             temp = taxiscanner.nextLine();
@@ -139,6 +139,7 @@ public class Bruwmbruwm {
         while(taxi_idle.size() < Input.number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
+            System.out.println(output.getMinuteOutput());
             output.sendOutput();
         }
         //System.out.println("stop");
