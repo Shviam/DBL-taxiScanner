@@ -10,6 +10,7 @@ package Bruwmbruwm;
  *
  * @author s156035
  */
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.NoSuchElementException;
@@ -44,7 +45,11 @@ public class TaxiScanner {
      */
     private TaxiScanner(){
         state = State.INITIAL;
-        scanner = new Scanner(System.in);
+        try {
+            scanner = new Scanner(new File("/C:/input.txt"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TaxiScanner.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -111,14 +116,14 @@ public class TaxiScanner {
      * @throws IllegalStateException if called when readLine is expected by the ordering.
      */
     public void println(String s){
+        
         if (state != State.AWAITINGPRINT) {
             throw new IllegalStateException("Print called while not in AWAITINGPRINT state");
         }
-
         if (s.charAt(s.length() - 1) == 'c' && hasNextLine()) {
             state = State.AWAITINGNEXTLINE;
         }
-
+        
         System.out.println(s);
     }
 }
