@@ -139,12 +139,16 @@ public class Bruwmbruwm {
         while(taxi_idle.size() < Input.number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
+<<<<<<< HEAD
+=======
+            //taxiscanner.nextLine();
+>>>>>>> origin/master
             //System.out.println(output.getMinuteOutput());
             output.sendOutput();
         }
         //System.out.println("stop");
     }
-
+    
     public static void main(String[] args) {
         (new Bruwmbruwm()).run();
     }
@@ -269,7 +273,8 @@ public class Bruwmbruwm {
             case DROP:
                 //Drop off the passenger
                 output.dropOffPassenger(Id, t.served.goal_node);
-                returnToHotspot(t);
+                if(cus_waiting.isEmpty()) returnToHotspot(t);
+                setIdle(t);
                 break;
 
             case IDLE:
@@ -288,6 +293,9 @@ public class Bruwmbruwm {
             }
         }
         t.path = astar.aStar(t.taxiPosition, nearest.node.position);
+    }
+    
+    public void setIdle(Taxi t){
         t.function = State.IDLE;
         taxi_idle.add(t);
     }
