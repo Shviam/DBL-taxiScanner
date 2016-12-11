@@ -139,7 +139,7 @@ public class Bruwmbruwm {
         while(taxi_idle.size() < Input.number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
-            System.out.println(output.getMinuteOutput());
+            //System.out.println(output.getMinuteOutput());
             output.sendOutput();
         }
         //System.out.println("stop");
