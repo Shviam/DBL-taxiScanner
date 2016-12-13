@@ -46,7 +46,7 @@ public class TaxiScanner {
     private TaxiScanner(){
         state = State.INITIAL;
         try {
-            scanner = new Scanner(new File("/C:/input.txt"));
+            scanner = new Scanner(new File("/E:/input.txt"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TaxiScanner.class.getName()).log(Level.SEVERE, null, ex);
         }
