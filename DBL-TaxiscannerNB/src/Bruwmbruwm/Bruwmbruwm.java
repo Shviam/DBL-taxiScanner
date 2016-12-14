@@ -1,4 +1,3 @@
-package Bruwmbruwm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -139,10 +138,7 @@ public class Bruwmbruwm {
         while(taxi_idle.size() < Input.number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
-<<<<<<< HEAD
-=======
-            //taxiscanner.nextLine();
->>>>>>> origin/master
+
             //System.out.println(output.getMinuteOutput());
             output.sendOutput();
         }
