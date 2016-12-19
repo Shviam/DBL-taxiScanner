@@ -13,24 +13,24 @@ public class Output{
 
     public void pickUpPassenger(int taxi, int destination){
         // in the format p, taxi, destination node
-        addToMinuteOutput("p "+taxi+" "+destination+" ");
+        addToMinuteOutput("p "+ (taxi + 1) +" "+destination+" ");
     }
 
     public void dropOffPassenger(int taxi, int destination){
         //in the format d, taxi, destination node
-        addToMinuteOutput("d "+taxi+" "+destination+" ");
+        addToMinuteOutput("d "+ (taxi + 1) +" "+destination+" ");
     }
 
     public void taxiGoTo(int taxi, int destination){
         //in the format m, taxi, node to travel to
         //this is only possible if the taxi is adjacent to the destination node...
         //AKA you can only travel one edge at a time
-        addToMinuteOutput("m "+taxi+" "+destination+" ");
+        addToMinuteOutput("m "+ (taxi + 1) +" "+destination+" ");
     }
 
     //should only be used before initialization, use taxiGoTo afterwards
     public void taxiSetPosition(int taxi, int node){
-        addToMinuteOutput("m "+taxi+" "+node+" ");
+        addToMinuteOutput("m "+ (taxi + 1) +" "+node+" ");
     }
 
     //adds a command to our output string minuteOutput for the current minute
