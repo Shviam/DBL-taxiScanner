@@ -304,6 +304,7 @@ public class Bruwmbruwm {
         
         for(int x = 0; x < input.number_of_taxis; x++){
             taxis[x].taxiPosition = hotspots[x%number_hotspots].node.position;
+            output.taxiSetPosition(x, taxis[x].taxiPosition);
         }
     }
 }
