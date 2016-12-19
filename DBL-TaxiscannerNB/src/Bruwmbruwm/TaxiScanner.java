@@ -1,22 +1,5 @@
-package Bruwmbruwm;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author s156035
- */
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Singleton class that manages IO for the Taxi Scheduling project for DBL Algorithms Q2 2016/2017. Enforces proper
@@ -45,11 +28,7 @@ public class TaxiScanner {
      */
     private TaxiScanner(){
         state = State.INITIAL;
-        try {
-            scanner = new Scanner(new File("/C:/input.txt"));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(TaxiScanner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        scanner = new Scanner(System.in);
     }
 
     /**
@@ -116,46 +95,14 @@ public class TaxiScanner {
      * @throws IllegalStateException if called when readLine is expected by the ordering.
      */
     public void println(String s){
-        
         if (state != State.AWAITINGPRINT) {
             throw new IllegalStateException("Print called while not in AWAITINGPRINT state");
         }
+
         if (s.charAt(s.length() - 1) == 'c' && hasNextLine()) {
             state = State.AWAITINGNEXTLINE;
         }
-        
+
         System.out.println(s);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
