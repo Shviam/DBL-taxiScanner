@@ -159,14 +159,30 @@ public class Bruwmbruwm {
             int max_cus = Input.seats - 1;
             int smallest_path = Integer.MAX_VALUE;
             for(int i=0; i<Input.number_of_taxis; i++){
-                if(taxis[i].queue.size() <= max_cus){
-                    max_cus = taxis[i].queue.size();
-                    int extended = extendedPath(taxis[i], cus_waiting.peek().current_node);
+                if(taxis[i].customer_queue.size() <= max_cus){
+                    if(taxis[i].customer_queue.size() < max_cus){
+                        max_cus = taxis[i].customer_queue.size();
+                        smallest_path = Integer.MAX_VALUE;
+                    }
+                    int extended;
+                    if(!taxis[i].customer_queue.isEmpty()){
+                        extended = extendedPath(taxis[i], cus_waiting.peek().current_node);
+                    } else {
+                        extended = astar.h.heuristic(t.taxiPosition, cus_waiting.peek().current_node);
+                    }
+                    if(extended < smallest_path){
+                        t = taxis[i];
+                        smallest_path = extended;
+                    }
                 }
             }
-            if (assigned) {
-                t.served = cus_waiting.poll();
-                t.path = astar.aStar(t.taxiPosition, t.served.current_node);
+            if(t.customer_queue.isEmpty() || smallest_path <= 2 * astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node)){
+                assigned = true;
+            }
+                
+            if (assigned) { 
+                t.customer_queue.add(cus_waiting.poll());
+                t.path = astar.aStar(t.taxiPosition, t.customer_queue.peek().current_node);
                 t.function = State.PICK;
                 idle_taxis--;
                 //max.remove();
@@ -177,8 +193,8 @@ public class Bruwmbruwm {
     }
     
     int extendedPath(Taxi t, int des){
-        int cur_path = astar.h.heuristic(t.taxiPosition, t.queue.peek().goal_node);
-        int ext_path = astar.h.heuristic(t.taxiPosition, des) + astar.h.heuristic(des, t.queue.peek().goal_node);
+        int cur_path = astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node);
+        int ext_path = astar.h.heuristic(t.taxiPosition, des) + astar.h.heuristic(des, t.customer_queue.peek().goal_node);
         return ext_path - cur_path;
     }
     
