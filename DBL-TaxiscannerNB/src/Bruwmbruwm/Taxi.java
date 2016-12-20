@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Bruwmbruwm;
+import java.util.Queue;
 import java.util.Stack;
 /**
  *
@@ -17,7 +18,7 @@ enum State {
 public class Taxi {
     Stack<Integer> path = new Stack();
     int taxi_id;
-    Customer served;
+    Queue<Customer> customer_queue;
     Node destination;
     int taxiPosition;
     //Node node[];    

@@ -219,7 +219,6 @@ public class Bruwmbruwm {
         return out;
     }
     
-
     public int[] getHighestDegree(int degreeNumber) {
         int storeDegree[] = new int[input.number_nodes];
         int degree;
@@ -265,16 +264,21 @@ public class Bruwmbruwm {
             case PICK:
                 //Pick up the passenger at the current node
                 //And determine the path from the current node to the destination
-                output.pickUpPassenger(Id, t.served.goal_node);
-                t.path = astar.aStar(t.taxiPosition, t.served.goal_node);
+                output.pickUpPassenger(Id, t.customer_queue.peek().goal_node);
+                t.path = astar.aStar(t.taxiPosition, t.customer_queue.peek().goal_node);
                 t.function = State.DROP;
                 break;
 
             case DROP:
                 //Drop off the passenger
-                output.dropOffPassenger(Id, t.served.goal_node);
-                if(cus_waiting.isEmpty()) returnToHotspot(t);
-                setIdle(t);
+                output.dropOffPassenger(Id, t.customer_queue.remove().goal_node);
+                
+                if(t.customer_queue.peek() == null){
+                    if(cus_waiting.isEmpty()) returnToHotspot(t);
+                    setIdle(t);
+                } else {
+                    processCustomer(t);
+                }
                 break;
 
             case IDLE:
@@ -309,5 +313,10 @@ public class Bruwmbruwm {
             taxis[x].taxiPosition = hotspots[x%number_hotspots].node.position;
             output.taxiSetPosition(x, taxis[x].taxiPosition);
         }
+    }
+    
+    public void processCustomer(Taxi taxi){
+        taxi.path = astar.aStar(taxi.taxiPosition, taxi.customer_queue.peek().current_node);
+        taxi.function = State.PICK;
     }
 }
