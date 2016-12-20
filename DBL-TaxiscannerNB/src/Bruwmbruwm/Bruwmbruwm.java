@@ -87,7 +87,7 @@ public class Bruwmbruwm {
                 //Distribute taxis
                 distributeTaxis();
             }
-            taxiscanner.println("c");
+            output.sendOutput();
         }
         /****************************************************/
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
