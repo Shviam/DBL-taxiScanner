@@ -83,14 +83,16 @@ public class Bruwmbruwm {
                 //Look at the path the customer will take and assign weight to the nodes along it
                 weighPaths(new Customer(start_pos, end_pos));
             }
+            if(x == training_time - 1){
+                //Distribute taxis
+                distributeTaxis();
+            }
             taxiscanner.println("c");
         }
         /****************************************************/
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
         /****************************************************/
         
-        //Distribute taxis
-        distributeTaxis();
         
         for (int x = training_time; x < total_time; x++) {
         //while(taxiscanner.hasNextLine()){
