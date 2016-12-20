@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Bruwmbruwm;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 /**
@@ -27,6 +28,7 @@ public class Taxi {
     public Taxi(int id){
         taxi_id = id;
         this.function = State.IDLE;
+        customer_queue = new LinkedList<>();
     }
     
     public boolean isIdle (){
