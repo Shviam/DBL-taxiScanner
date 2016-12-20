@@ -28,8 +28,8 @@ public class Bruwmbruwm {
     Node[] nodes;
     Taxi[] taxis;
     Queue<Customer> cus_waiting = new LinkedList<>();
-    LinkedList<Taxi> taxi_idle = new LinkedList<>();
-
+    int idle_taxis;
+    
     //Temporary globals
     int max_distance;
     boolean ended;
@@ -42,9 +42,7 @@ public class Bruwmbruwm {
         /****************************************************/
         input.readPreamble();
         taxis = input.getTaxiArray();
-        for (Taxi taxi : taxis) {
-            taxi_idle.add(taxi);
-        }
+        idle_taxis = Input.number_of_taxis;
         training_time = Input.training_time;
         total_time = Input.total_time;
         astar = new Astar(input);
@@ -84,14 +82,17 @@ public class Bruwmbruwm {
                 //Look at the path the customer will take and assign weight to the nodes along it
                 weighPaths(new Customer(start_pos, end_pos));
             }
-            taxiscanner.println("c");
+            if(x == training_time - 1){
+                //Distribute taxis
+                distributeTaxis();
+            }
+            output.sendOutput();
         }
         /****************************************************/
         /* BWRUMBWRUM MOTHERFUCKERS *************************/
         /****************************************************/
         
-        //Distribute taxis
-        distributeTaxis();
+        
         
         for (int x = training_time; x < total_time; x++) {
         //while(taxiscanner.hasNextLine()){
@@ -136,7 +137,7 @@ public class Bruwmbruwm {
             processMoves();
             output.sendOutput();
         }
-        while(taxi_idle.size() < Input.number_of_taxis || !cus_waiting.isEmpty()){
+        while(idle_taxis < Input.number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
             //System.out.println(output.getMinuteOutput());
@@ -152,36 +153,35 @@ public class Bruwmbruwm {
     //assign waiting customers to taxis
     void assignCustomer() {
         while (!cus_waiting.isEmpty()) {
-            ListIterator<Taxi> it = taxi_idle.listIterator();
             //ListIterator<Taxi> max = taxi_idle.listIterator();
             Taxi t = new Taxi(1); //The initialisation is just a dummy so the code doesn't complain. It's a feature.
             boolean assigned = false;
-            if (it.hasNext()) {
-                t = it.next();
-                it.remove();
-                //max = it;
-                assigned = true;
-            }
-            while (it.hasNext()) {
-                Taxi s = it.next();
-                if (astar.h.heuristic(t.taxiPosition, cus_waiting.peek().current_node) > astar.h.heuristic(s.taxiPosition, cus_waiting.peek().current_node)) {
-                    it.remove();
-                    it.add(t);
-                    t = s;
-                    //max = it;
+            int max_cus = Input.seats - 1;
+            int smallest_path = Integer.MAX_VALUE;
+            for(int i=0; i<Input.number_of_taxis; i++){
+                if(taxis[i].queue.size() <= max_cus){
+                    max_cus = taxis[i].queue.size();
+                    int extended = extendedPath(taxis[i], cus_waiting.peek().current_node);
                 }
             }
             if (assigned) {
                 t.served = cus_waiting.poll();
                 t.path = astar.aStar(t.taxiPosition, t.served.current_node);
                 t.function = State.PICK;
+                idle_taxis--;
                 //max.remove();
             } else {
                 break;
             }
         }
     }
-
+    
+    int extendedPath(Taxi t, int des){
+        int cur_path = astar.h.heuristic(t.taxiPosition, t.queue.peek().goal_node);
+        int ext_path = astar.h.heuristic(t.taxiPosition, des) + astar.h.heuristic(des, t.queue.peek().goal_node);
+        return ext_path - cur_path;
+    }
+    
     void processMoves() {
         for (int y = 0; y < Input.number_of_taxis; y++) {
             if (!taxis[y].path.isEmpty()) {
@@ -293,7 +293,7 @@ public class Bruwmbruwm {
     
     public void setIdle(Taxi t){
         t.function = State.IDLE;
-        taxi_idle.add(t);
+        idle_taxis++;
     }
     
     public void distributeTaxis(){
@@ -303,6 +303,7 @@ public class Bruwmbruwm {
         
         for(int x = 0; x < input.number_of_taxis; x++){
             taxis[x].taxiPosition = hotspots[x%number_hotspots].node.position;
+            output.taxiSetPosition(x, taxis[x].taxiPosition);
         }
     }
 }

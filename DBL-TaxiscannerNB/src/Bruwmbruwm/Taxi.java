@@ -21,7 +21,6 @@ public class Taxi {
     Node destination;
     int taxiPosition;
     //Node node[];    
-    int storeDegree[];
     State function;
     
     public Taxi(int id){

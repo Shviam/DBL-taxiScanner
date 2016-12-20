@@ -99,9 +99,15 @@ public class Input {
                 nodes[x-5].initialise(size);
 
                 for(int y = 0; y < size; y++){
-                    int end = temp.indexOf(" ");
-                    int neighbour = Integer.parseInt(temp.substring(0, whitespace));
-                    temp = temp.substring(end+1, temp.length());
+                    whitespace = temp.indexOf(" ");
+                    int neighbour = 0;
+                    if(whitespace != -1){
+                        neighbour = Integer.parseInt(temp.substring(0, whitespace));
+                    }
+                    else{
+                        neighbour = Integer.parseInt(temp.substring(0, temp.length()));
+                    }
+                    temp = temp.substring(whitespace+1, temp.length());
 
                     nodes[x-5].write_neighbour(neighbour);
                 }     
