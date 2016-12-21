@@ -2,7 +2,6 @@ package Bruwmbruwm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -17,16 +16,23 @@ public class Bruwmbruwm {
     HotSpot[] hotspots = new HotSpot[number_hotspots];
     //HotSpot[] hotspots2 = new HotSpot[10];
     //classes
-    Input input = new Input();
+
     Output output = new Output();
     TaxiScanner taxiscanner = TaxiScanner.getInstance();
 
     //initialize variables
+    float alpha;
+    int max_drop_off_time;
+    int number_of_taxis, seats;
+    int number_nodes;
     int training_time;
     int total_time;
-    public int[] frequence;  //How often a node (sorted by index) is accessed
+    int preamble_length;
     Node[] nodes;
     Taxi[] taxis;
+    ArrayList<Customer> customers = new ArrayList<>();
+
+    public int[] frequence;  //How often a node (sorted by index) is accessed
     Queue<Customer> cus_waiting = new LinkedList<>();
     int idle_taxis;
     
@@ -40,14 +46,10 @@ public class Bruwmbruwm {
         /****************************************************/
         /* Read preamble ************************************/
         /****************************************************/
-        input.readPreamble();
-        taxis = input.getTaxiArray();
-        idle_taxis = Input.number_of_taxis;
-        training_time = Input.training_time;
-        total_time = Input.total_time;
-        astar = new Astar(input);
+        readPreamble();
+        astar = new Astar(nodes,number_nodes);
         taxiscanner.println("c");
-        frequence = new int[input.number_nodes];
+        frequence = new int[number_nodes];
 
         /****************************************************/
         /* Process Training Time ****************************/
@@ -137,7 +139,7 @@ public class Bruwmbruwm {
             processMoves();
             output.sendOutput();
         }
-        while(idle_taxis < Input.number_of_taxis || !cus_waiting.isEmpty()){
+        while(idle_taxis < number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
             //System.out.println(output.getMinuteOutput());
@@ -156,9 +158,9 @@ public class Bruwmbruwm {
             //ListIterator<Taxi> max = taxi_idle.listIterator();
             Taxi t = new Taxi(1); //The initialisation is just a dummy so the code doesn't complain. It's a feature.
             boolean assigned = false;
-            int max_cus = Input.seats - 1;
+            int max_cus = seats - 1;
             int smallest_path = Integer.MAX_VALUE;
-            for(int i=0; i<Input.number_of_taxis; i++){
+            for(int i=0; i<number_of_taxis; i++){
                 if(taxis[i].customer_queue.size() <= max_cus){
                     if(taxis[i].customer_queue.size() < max_cus){
                         max_cus = taxis[i].customer_queue.size();
@@ -199,7 +201,7 @@ public class Bruwmbruwm {
     }
     
     void processMoves() {
-        for (int y = 0; y < Input.number_of_taxis; y++) {
+        for (int y = 0; y < number_of_taxis; y++) {
             if (!taxis[y].path.isEmpty()) {
                 taxis[y].taxiPosition = taxis[y].path.pop();
                 output.taxiGoTo(y, taxis[y].taxiPosition);
@@ -220,7 +222,7 @@ public class Bruwmbruwm {
         int[] out = new int[amount];
         for (int x = 0; x < amount; x++) {
             int highest = 0;
-            for (int y = 0; y < Input.number_nodes; y++) {
+            for (int y = 0; y < number_nodes; y++) {
                 if (frequence[y] > frequence[highest]) {
                     highest = y;
                 }
@@ -232,14 +234,13 @@ public class Bruwmbruwm {
     }
     
     public int[] getHighestDegree(int degreeNumber) {
-        int storeDegree[] = new int[input.number_nodes];
-        int degree;
+        int storeDegree[] = new int[number_nodes];
 
         int index ;
         int large[] = new int[5];
         int max;
-        for(int i=0;i<input.number_nodes;i++){
-            storeDegree[i] = input.nodes[i].di;           
+        for(int i=0;i<number_nodes;i++){
+            storeDegree[i] = nodes[i].di;           
         }
         for(int j=0; j<5;j++){
             max = storeDegree[0];
@@ -259,14 +260,14 @@ public class Bruwmbruwm {
     public void hotSpotFreq() {
         int[] hotspotindices = getHighestFreq(5);
         for (int i = 0; i < 5; i++) {
-            hotspots[i] = new HotSpot(input.nodes[hotspotindices[i]]);
+            hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
         }
     }
 
     public void hotSpotDegree() {
         int[] hotspotindices = getHighestDegree(5);
         for (int i = 5; i < 10; i++) {
-            hotspots[i] = new HotSpot(input.nodes[hotspotindices[i-5]]);
+            hotspots[i] = new HotSpot(nodes[hotspotindices[i-5]]);
         }
     }
 
@@ -321,7 +322,7 @@ public class Bruwmbruwm {
         hotSpotFreq();
         hotSpotDegree();
         
-        for(int x = 0; x < input.number_of_taxis; x++){
+        for(int x = 0; x < number_of_taxis; x++){
             taxis[x].taxiPosition = hotspots[x%number_hotspots].node.position;
             output.taxiSetPosition(x, taxis[x].taxiPosition);
         }
@@ -331,4 +332,82 @@ public class Bruwmbruwm {
         taxi.path = astar.aStar(taxi.taxiPosition, taxi.customer_queue.peek().current_node);
         taxi.function = State.PICK;
     }
+    
+    //Read the preamble and set the corresponding variables
+    public void readPreamble(){
+        preamble_length = Integer.parseInt(taxiscanner.nextLine());
+        
+        for (int x = 1; x < preamble_length; x++){
+            //Read the preamble
+            switch(x){
+                case 1:
+                    alpha = Float.parseFloat(taxiscanner.nextLine());
+                    break;
+                case 2:
+                    max_drop_off_time = Integer.parseInt(taxiscanner.nextLine());
+                    break;
+                case 3:
+                    temp = taxiscanner.nextLine();
+                    
+                    //Find end of first integer
+                    int whitespace = temp.indexOf(" ");
+                    number_of_taxis = Integer.parseInt(temp.substring(0, whitespace)); 
+                    
+                    taxis = new Taxi[number_of_taxis];
+                    for(int y = 0; y < number_of_taxis; y++){
+                        taxis[y] = new Taxi(y);
+                    }
+                    
+                    seats = Integer.parseInt(temp.substring(whitespace+1, temp.length()));
+                    break;
+                case 4:
+                    number_nodes = Integer.parseInt(taxiscanner.nextLine());
+                    nodes = new Node[number_nodes];
+                    for(int y = 0; y < number_nodes; y++){
+                        nodes[y] = new Node(y);
+                    }
+                    break;
+            }
+            
+            if(inBetween(x, 5, 5+number_nodes)){
+                //Take the number up to the first whitespace, and then delete it.
+                temp = taxiscanner.nextLine();
+                int whitespace = temp.indexOf(" ");
+                int size = Integer.parseInt(temp.substring(0, whitespace)); 
+                temp = temp.substring(whitespace+1, temp.length());
+
+                //initialise node
+                nodes[x-5].initialise(size);
+
+                for(int y = 0; y < size; y++){
+                    whitespace = temp.indexOf(" ");
+                    int neighbour = 0;
+                    if(whitespace != -1){
+                        neighbour = Integer.parseInt(temp.substring(0, whitespace));
+                    }
+                    else{
+                        neighbour = Integer.parseInt(temp.substring(0, temp.length()));
+                    }
+                    temp = temp.substring(whitespace+1, temp.length());
+
+                    nodes[x-5].write_neighbour(neighbour);
+                }     
+            }
+            if(x == 4+number_nodes){
+                temp = taxiscanner.nextLine();
+                int whitespace = temp.indexOf(" ");
+                training_time = Integer.parseInt(temp.substring(0, whitespace));
+                total_time = Integer.parseInt(temp.substring(whitespace+1, temp.length()));
+            }
+            
+            
+        }
+    }
+    
+    
+    //Quality of life methods    
+    public boolean inBetween(int x, int lower_bound, int upper_bound){
+        return !(x < lower_bound || x > upper_bound);
+    }
 }
+

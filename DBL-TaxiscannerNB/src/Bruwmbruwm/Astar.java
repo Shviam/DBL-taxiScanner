@@ -15,17 +15,16 @@ import java.util.Stack;
 public class Astar {
     //classes
     Heuristic h;
-    Input nodeArray;
     
     //final variables
-    int number_nodes = Input.number_nodes;
+    int number_nodes;
     //changeable variables
     Node[] nodes;
     
-    Astar(Input in){
-        this.nodeArray = in;
-        this.h = new Heuristic(in);
-        nodes = nodeArray.getNodeArray();
+    Astar(Node[] nodes, int number_nodes){
+        this.nodes = nodes;
+        this.number_nodes = number_nodes;
+        this.h = new Heuristic(this.nodes, this.number_nodes);
     }
     
     Stack<Integer> aStar(int source, int goal){
