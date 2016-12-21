@@ -10,7 +10,6 @@ package Bruwmbruwm;
  * @author s156035
  */
 class Node{
-    private Node[] nodes;
     int[] neighbours;
     public int di = 0; //amount of neighbour
     int position;

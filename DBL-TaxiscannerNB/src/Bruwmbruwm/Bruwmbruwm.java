@@ -159,7 +159,8 @@ public class Bruwmbruwm {
             int max_cus = Input.seats - 1;
             int smallest_path = Integer.MAX_VALUE;
             for(int i=0; i<Input.number_of_taxis; i++){
-                if(taxis[i].customer_queue.size() <= max_cus){
+                if(taxis[i].function != State.PICK && taxis[i].customer_queue.size() <= max_cus){
+                    assigned = true;
                     if(taxis[i].customer_queue.size() < max_cus){
                         max_cus = taxis[i].customer_queue.size();
                         smallest_path = Integer.MAX_VALUE;
@@ -168,7 +169,7 @@ public class Bruwmbruwm {
                     if(!taxis[i].customer_queue.isEmpty()){
                         extended = extendedPath(taxis[i], cus_waiting.peek().current_node);
                     } else {
-                        extended = astar.h.heuristic(t.taxiPosition, cus_waiting.peek().current_node);
+                        extended = astar.h.heuristic(taxis[i].taxiPosition, cus_waiting.peek().current_node);
                     }
                     if(extended < smallest_path){
                         t = taxis[i];
@@ -176,15 +177,17 @@ public class Bruwmbruwm {
                     }
                 }
             }
-            if(t.customer_queue.isEmpty() || smallest_path <= 2 * astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node)){
-                assigned = true;
+            if(!t.customer_queue.isEmpty() && smallest_path > astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node)){
+                assigned = false;
             }
                 
             if (assigned) { 
-                t.customer_queue.add(cus_waiting.poll());
-                t.path = astar.aStar(t.taxiPosition, t.customer_queue.peek().current_node);
+                //t.customer_queue.add(cus_waiting.poll());
+                t.pick_up = cus_waiting.poll();
+                t.path = astar.aStar(t.taxiPosition, t.pick_up.current_node);
+                //ystem.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
                 t.function = State.PICK;
-                idle_taxis--;
+                //idle_taxis--;
                 //max.remove();
             } else {
                 break;
@@ -199,12 +202,15 @@ public class Bruwmbruwm {
     }
     
     void processMoves() {
+        idle_taxis = 0;
         for (int y = 0; y < Input.number_of_taxis; y++) {
             if (!taxis[y].path.isEmpty()) {
                 taxis[y].taxiPosition = taxis[y].path.pop();
                 output.taxiGoTo(y, taxis[y].taxiPosition);
             } else if (!taxis[y].isIdle()) {
                 doFunction(taxis[y], y);
+            } else {
+                idle_taxis++;
             }
         }
     }
@@ -276,16 +282,17 @@ public class Bruwmbruwm {
             case PICK:
                 //Pick up the passenger at the current node
                 //And determine the path from the current node to the destination
-                output.pickUpPassenger(Id, t.customer_queue.peek().goal_node);
+                output.pickUpPassenger(Id, t.pick_up.goal_node);
+                t.customer_queue.add(t.pick_up);
                 t.path = astar.aStar(t.taxiPosition, t.customer_queue.peek().goal_node);
                 t.function = State.DROP;
                 break;
 
             case DROP:
                 //Drop off the passenger
-                output.dropOffPassenger(Id, t.customer_queue.remove().goal_node);
+                output.dropOffPassenger(Id, t.customer_queue.poll().goal_node);
                 
-                if(t.customer_queue.peek() == null){
+                if(t.customer_queue.isEmpty()){
                     if(cus_waiting.isEmpty()) returnToHotspot(t);
                     setIdle(t);
                 } else {
@@ -313,7 +320,7 @@ public class Bruwmbruwm {
     
     public void setIdle(Taxi t){
         t.function = State.IDLE;
-        idle_taxis++;
+        //idle_taxis++;
     }
     
     public void distributeTaxis(){
@@ -329,6 +336,6 @@ public class Bruwmbruwm {
     
     public void processCustomer(Taxi taxi){
         taxi.path = astar.aStar(taxi.taxiPosition, taxi.customer_queue.peek().current_node);
-        taxi.function = State.PICK;
+        taxi.function = State.DROP;
     }
 }

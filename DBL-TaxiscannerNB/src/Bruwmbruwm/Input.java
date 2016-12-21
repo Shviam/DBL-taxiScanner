@@ -100,7 +100,7 @@ public class Input {
 
                 for(int y = 0; y < size; y++){
                     whitespace = temp.indexOf(" ");
-                    int neighbour = 0;
+                    int neighbour;
                     if(whitespace != -1){
                         neighbour = Integer.parseInt(temp.substring(0, whitespace));
                     }
