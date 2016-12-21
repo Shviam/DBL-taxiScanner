@@ -14,7 +14,6 @@ public class Bruwmbruwm {
     //hotspot variables
     int number_hotspots = 10;
     HotSpot[] hotspots = new HotSpot[number_hotspots];
-    //HotSpot[] hotspots2 = new HotSpot[10];
     //classes
 
     Output output = new Output();
@@ -30,11 +29,15 @@ public class Bruwmbruwm {
     int preamble_length;
     Node[] nodes;
     Taxi[] taxis;
+
     ArrayList<Customer> customers = new ArrayList<>();
 
-    public int[] frequence;  //How often a node (sorted by index) is accessed
+    public int[] frequence;  //How often a node (sorted by index) is accessed   
+    LinkedList<Taxi> busytaxis = new LinkedList<>();
+    
+    
     Queue<Customer> cus_waiting = new LinkedList<>();
-    int idle_taxis;
+    int idle_taxis; // is taxis in run
     
     //Temporary globals
     int max_distance;
@@ -189,6 +192,7 @@ public class Bruwmbruwm {
                 t.path = astar.aStar(t.taxiPosition, t.pick_up.current_node);
                 //System.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
                 t.function = State.PICK;
+                busytaxis.add(t);
                 //idle_taxis--;
                 //max.remove();
             } else {
@@ -204,8 +208,9 @@ public class Bruwmbruwm {
     }
     
     void processMoves() {
+
         idle_taxis = 0;
-        for (int y = 0; y < number_of_taxis; y++) {
+        for (int y = 0; y < busytaxis.size(); y++) {
 
             if (!taxis[y].path.isEmpty()) {
                 taxis[y].taxiPosition = taxis[y].path.pop();
