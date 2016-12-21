@@ -1,10 +1,7 @@
 package Bruwmbruwm;
 
-<<<<<<< HEAD
 import java.util.Iterator;
-=======
 import java.util.ArrayList;
->>>>>>> origin/master
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -33,16 +30,12 @@ public class Bruwmbruwm {
     int preamble_length;
     Node[] nodes;
     Taxi[] taxis;
-<<<<<<< HEAD
-    
+
     LinkedList<Integer> busytaxis = new LinkedList<>();
-=======
 
     ArrayList<Customer> customers = new ArrayList<>();
 
     public int[] frequence;  //How often a node (sorted by index) is accessed   
-    LinkedList<Taxi> busytaxis = new LinkedList<>();
->>>>>>> origin/master
     
     
     Queue<Customer> cus_waiting = new LinkedList<>();
@@ -217,18 +210,10 @@ public class Bruwmbruwm {
     }
     
     void processMoves() {
-<<<<<<< HEAD
         Iterator<Integer> iterator = busytaxis.iterator();
         while(iterator.hasNext()){
             int y = iterator.next();
             if (taxis[y].path.isEmpty()) {
-=======
-
-        idle_taxis = 0;
-        for (int y = 0; y < busytaxis.size(); y++) {
-
-            if (!taxis[y].path.isEmpty()) {
->>>>>>> origin/master
                 taxis[y].taxiPosition = taxis[y].path.pop();
                 output.taxiGoTo(y, taxis[y].taxiPosition);
             } else {
