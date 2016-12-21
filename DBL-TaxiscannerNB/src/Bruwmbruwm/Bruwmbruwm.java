@@ -1,5 +1,6 @@
 package Bruwmbruwm;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -25,7 +26,7 @@ public class Bruwmbruwm {
     Node[] nodes;
     Taxi[] taxis;
     
-    LinkedList<Taxi> busytaxis = new LinkedList<>();
+    LinkedList<Integer> busytaxis = new LinkedList<>();
     
     Queue<Customer> cus_waiting = new LinkedList<>();
     int idle_taxis; // is taxis in run
@@ -186,7 +187,7 @@ public class Bruwmbruwm {
                 t.path = astar.aStar(t.taxiPosition, t.pick_up.current_node);
                 //System.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
                 t.function = State.PICK;
-                busytaxis.add(t);
+                busytaxis.add(t.taxi_id);
                 //idle_taxis--;
                 //max.remove();
             } else {
@@ -202,14 +203,14 @@ public class Bruwmbruwm {
     }
     
     void processMoves() {
-        for (int y = 0; y < busytaxis.size(); y++) {
-            if (!taxis[y].path.isEmpty()) {
+        Iterator<Integer> iterator = busytaxis.iterator();
+        while(iterator.hasNext()){
+            int y = iterator.next();
+            if (taxis[y].path.isEmpty()) {
                 taxis[y].taxiPosition = taxis[y].path.pop();
                 output.taxiGoTo(y, taxis[y].taxiPosition);
-            } else if (!taxis[y].isIdle()) {
-                doFunction(taxis[y], y);
             } else {
-                idle_taxis++;
+                doFunction(taxis[y], y);
             }
         }
     }
