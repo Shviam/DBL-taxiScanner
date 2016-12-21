@@ -414,9 +414,7 @@ public class Bruwmbruwm {
                 int whitespace = temp.indexOf(" ");
                 training_time = Integer.parseInt(temp.substring(0, whitespace));
                 total_time = Integer.parseInt(temp.substring(whitespace+1, temp.length()));
-            }
-            
-            
+            }            
         }
     }
     
