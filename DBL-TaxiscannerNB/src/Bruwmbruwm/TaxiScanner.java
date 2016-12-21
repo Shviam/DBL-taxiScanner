@@ -50,6 +50,7 @@ public class TaxiScanner {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TaxiScanner.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //scanner = new Scanner(System.in);
     }
 
     /**

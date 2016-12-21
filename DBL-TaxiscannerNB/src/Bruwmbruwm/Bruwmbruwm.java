@@ -1,8 +1,6 @@
 package Bruwmbruwm;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -140,10 +138,9 @@ public class Bruwmbruwm {
         while(idle_taxis < Input.number_of_taxis || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
-            //System.out.println(output.getMinuteOutput());
+            //System.out.println("waiting " + cus_waiting.size() + "idle " + idle_taxis);
             output.sendOutput();
         }
-        //System.out.println("stop");
     }
     
     public static void main(String[] args) {
@@ -185,7 +182,7 @@ public class Bruwmbruwm {
                 //t.customer_queue.add(cus_waiting.poll());
                 t.pick_up = cus_waiting.poll();
                 t.path = astar.aStar(t.taxiPosition, t.pick_up.current_node);
-                //ystem.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
+                //System.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
                 t.function = State.PICK;
                 //idle_taxis--;
                 //max.remove();
@@ -290,11 +287,11 @@ public class Bruwmbruwm {
 
             case DROP:
                 //Drop off the passenger
-                output.dropOffPassenger(Id, t.customer_queue.poll().goal_node);
-                
+                output.dropOffPassenger(Id, t.customer_queue.peek().goal_node);
+                t.customer_queue.poll();
                 if(t.customer_queue.isEmpty()){
-                    if(cus_waiting.isEmpty()) returnToHotspot(t);
                     setIdle(t);
+                    if(cus_waiting.isEmpty()) returnToHotspot(t);
                 } else {
                     processCustomer(t);
                 }
@@ -320,7 +317,7 @@ public class Bruwmbruwm {
     
     public void setIdle(Taxi t){
         t.function = State.IDLE;
-        //idle_taxis++;
+        idle_taxis++;
     }
     
     public void distributeTaxis(){
