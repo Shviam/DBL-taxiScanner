@@ -39,7 +39,7 @@ public class Bruwmbruwm {
     
     
     Queue<Customer> cus_waiting = new LinkedList<>();
-    int idle_taxis; // is taxis in run
+    //int idle_taxis; // is taxis in run
     
     //Temporary globals
     int max_distance;
@@ -52,6 +52,7 @@ public class Bruwmbruwm {
         /* Read preamble ************************************/
         /****************************************************/
         readPreamble();
+        //idle_taxis = number_of_taxis;
         astar = new Astar(nodes,number_nodes);
         taxiscanner.println("c");
         frequence = new int[number_nodes];
@@ -144,7 +145,7 @@ public class Bruwmbruwm {
             processMoves();
             output.sendOutput();
         }
-        while(idle_taxis < number_of_taxis || !cus_waiting.isEmpty()){
+        while(busytaxis.size() > 0 || !cus_waiting.isEmpty()){
             assignCustomer();
             processMoves();
             //System.out.println("waiting " + cus_waiting.size() + "idle " + idle_taxis);
@@ -191,10 +192,12 @@ public class Bruwmbruwm {
             if (assigned) { 
                 //t.customer_queue.add(cus_waiting.poll());
                 t.pick_up = cus_waiting.poll();
-                t.path = astar.aStar(t.taxiPosition, t.pick_up.current_node);
                 //System.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
+                if(t.isIdle() && t.path.isEmpty()){
+                    busytaxis.add(t.taxi_id);
+                }
+                t.path = astar.aStar(t.taxiPosition, t.pick_up.current_node);
                 t.function = State.PICK;
-                busytaxis.add(t.taxi_id);
                 //idle_taxis--;
                 //max.remove();
             } else {
@@ -213,11 +216,13 @@ public class Bruwmbruwm {
         Iterator<Integer> iterator = busytaxis.iterator();
         while(iterator.hasNext()){
             int y = iterator.next();
-            if (taxis[y].path.isEmpty()) {
+            if (!taxis[y].path.isEmpty()) {
                 taxis[y].taxiPosition = taxis[y].path.pop();
                 output.taxiGoTo(y, taxis[y].taxiPosition);
-            } else {
+            } else if(taxis[y].function != State.IDLE) {
                 doFunction(taxis[y], y);
+            } if(taxis[y].function == State.IDLE && taxis[y].path.isEmpty()) {
+                iterator.remove();
             }
         }
     }
@@ -307,7 +312,7 @@ public class Bruwmbruwm {
                 break;
 
             case IDLE:
-                //do nothing wait for instructions
+                
                 break;
         }
     }
@@ -326,7 +331,7 @@ public class Bruwmbruwm {
     
     public void setIdle(Taxi t){
         t.function = State.IDLE;
-        idle_taxis++;
+        //idle_taxis++;
     }
     
     public void distributeTaxis(){
@@ -341,7 +346,7 @@ public class Bruwmbruwm {
     }
     
     public void processCustomer(Taxi taxi){
-        taxi.path = astar.aStar(taxi.taxiPosition, taxi.customer_queue.peek().current_node);
+        taxi.path = astar.aStar(taxi.taxiPosition, taxi.customer_queue.peek().goal_node);
         taxi.function = State.DROP;
     }
     
