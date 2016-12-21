@@ -42,8 +42,8 @@ public class Bruwmbruwm {
     //int idle_taxis; // is taxis in run
     
     //Temporary globals
-    int max_distance;
-    boolean ended;
+    //int max_distance;
+    //boolean ended;
     String temp;
     Astar astar;
 
@@ -251,7 +251,6 @@ public class Bruwmbruwm {
     
     public int[] getHighestDegree(int degreeNumber) {
         int storeDegree[] = new int[number_nodes];
-
         int index ;
         int large[] = new int[5];
         int max;
