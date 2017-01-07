@@ -45,12 +45,12 @@ public class TaxiScanner {
      */
     private TaxiScanner(){
         state = State.INITIAL;
-        try {
-            scanner = new Scanner(new File("/C:/input.txt"));
+        /*try {
+            scanner = new Scanner(new File("/C:/001.in"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TaxiScanner.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //scanner = new Scanner(System.in);
+        }*/
+        scanner = new Scanner(System.in);
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 package Bruwmbruwm;
 
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
@@ -29,38 +30,41 @@ public class Astar {
     
     Stack<Integer> aStar(int source, int goal){
         PriorityQueue<NodeDist> Q = new PriorityQueue<>();
+        ArrayList<Integer> N = new ArrayList<>();
         //resetting the node values
-        for (Node node : nodes) {
+        /*for (Node node : nodes) {
             node.distance = Integer.MAX_VALUE;
             node.visited = false;
-        }
+        }*/
         //setting the source distance to 0 and pushing to queue
         nodes[source].distance = 0;
-        Q.add(new NodeDist(source, h.heuristic(source, goal)));
+        N.add(source);
+        Q.add(new NodeDist(source, 0));
         while(!Q.isEmpty()){
             NodeDist nd = Q.poll();
-            int k = nd.i;
-            int d = nd.d;
             //in case of multiple entries in queue, this node is already explored
-            if(nodes[k].visited) continue;
-            nodes[k].visited = true;
+            if(nodes[nd.i].visited) continue;
+            nodes[nd.i].visited = true;
             //if we reached the goal, stop searching
-            if(k == goal) break;
+            if(nd.i == goal) break;
             
             //check every neighbour of k
-            for(int u : nodes[k].neighbours){
+            for(int u : nodes[nd.i].neighbours){
                 //if already explored, skip it
                 if(nodes[u].visited) 
                     continue;
                 //update distance to source, and fscore = dis to source + heuristic to end
-                int newDis = nodes[k].distance + 1;
+                int newDis = nodes[nd.i].distance + 1;
                 int fscore = newDis + h.heuristic(u, goal);
                 
                 //in case there exist a faster path to u
                 if(newDis < nodes[u].distance){
+                    if(nodes[u].distance == Integer.MAX_VALUE){
+                        N.add(u);
+                    }
                     //set node values and add to queue
                     nodes[u].distance = newDis;
-                    nodes[u].parent = k;
+                    nodes[u].parent = nd.i;
                     Q.add(new NodeDist(u, fscore));
                 }
             }
@@ -72,6 +76,12 @@ public class Astar {
             p.add(k);
             k = nodes[k].parent;
         }
+        
+        for (int n : N) {
+            nodes[n].distance = Integer.MAX_VALUE;
+            nodes[n].visited = false;
+        }
+        
         return p;
     }
 }

@@ -26,6 +26,8 @@ class Node{
     public Node(int x){
         position = x;
         waypoint = false;
+        visited = false;
+        distance = Integer.MAX_VALUE;
     }
 
     //initialise the array with the amount of edges specified in the Preamble
