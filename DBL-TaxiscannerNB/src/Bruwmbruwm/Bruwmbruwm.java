@@ -88,7 +88,7 @@ public class Bruwmbruwm {
                 }
 
                 //Look at the path the customer will take and assign weight to the nodes along it
-                weighPaths(new Customer(start_pos, end_pos));
+                //weighPaths(new Customer(start_pos, end_pos));
             }
             if(x == training_time - 1){
                 //Distribute taxis
@@ -226,13 +226,14 @@ public class Bruwmbruwm {
             }
         }
     }
-
+    /*
     public void weighPaths(Customer passenger) {
         Stack<Integer> path = astar.aStar(passenger.current_node, passenger.goal_node);
         while (!path.isEmpty()) {
             frequence[path.pop()]++;
         }
     }
+*/
 
     public int[] getHighestFreq(int amount) {
         int[] out = new int[amount];
@@ -253,12 +254,12 @@ public class Bruwmbruwm {
         int storeDegree[] = new int[number_nodes];
 
         int index ;
-        int large[] = new int[5];
+        int large[] = new int[degreeNumber];
         int max;
         for(int i=0;i<number_nodes;i++){
             storeDegree[i] = nodes[i].di;           
         }
-        for(int j=0; j<5;j++){
+        for(int j=0; j<degreeNumber;j++){
             max = storeDegree[0];
             index = 0;
             for(int i=0;i < storeDegree.length;i++){
@@ -272,18 +273,18 @@ public class Bruwmbruwm {
         }
         return large;
     }
-
+    /*
     public void hotSpotFreq() {
         int[] hotspotindices = getHighestFreq(5);
         for (int i = 0; i < 5; i++) {
             hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
         }
     }
-
+    */
     public void hotSpotDegree() {
-        int[] hotspotindices = getHighestDegree(5);
-        for (int i = 5; i < 10; i++) {
-            hotspots[i] = new HotSpot(nodes[hotspotindices[i-5]]);
+        int[] hotspotindices = getHighestDegree(10);
+        for (int i = 0; i < 10; i++) {
+            hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
         }
     }
 
@@ -336,7 +337,7 @@ public class Bruwmbruwm {
     
     public void distributeTaxis(){
         //Establish hotspots
-        hotSpotFreq();
+        //hotSpotFreq();
         hotSpotDegree();
         
         for(int x = 0; x < number_of_taxis; x++){
