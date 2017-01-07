@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Bruwmbruwm;
+//package Bruwmbruwm;
 
 import static java.lang.Integer.max;
 import static java.util.Arrays.fill;
@@ -20,7 +20,7 @@ public class Heuristic {
     //heuristic variables
     Node[] nodes;
     int[][] heuristicDis;
-    public int number_waypoints = 16;
+    public int number_waypoints = 8;
     int number_nodes;
     
     //initializing the waypoint array for heuristic function

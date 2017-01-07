@@ -1,4 +1,4 @@
-package Bruwmbruwm;
+//package Bruwmbruwm;
 
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -163,36 +163,48 @@ public class Bruwmbruwm {
             //ListIterator<Taxi> max = taxi_idle.listIterator();
             Taxi t = new Taxi(1); //The initialisation is just a dummy so the code doesn't complain. It's a feature.
             boolean assigned = false;
-            int max_cus = seats - 1;
-            int smallest_path = Integer.MAX_VALUE;
+            int min_cus = seats - 1;        //cant have more customers than seats
+            int smallest_path = Integer.MAX_VALUE;          //heuristic value of path, initialized as max
 
             for(int i=0; i<number_of_taxis; i++){
-                if(taxis[i].function != State.PICK && taxis[i].customer_queue.size() <= max_cus){
+                //for all taxis that are idle or drop, and have less or equal customres to the minimal customers in a taxi
+                if(taxis[i].function != State.PICK && taxis[i].customer_queue.size() <= min_cus){
                     assigned = true;
-                    if(taxis[i].customer_queue.size() < max_cus){
-                        max_cus = taxis[i].customer_queue.size();
+                    
+                    //in case this taxi has less customers than minimum, reset smallest path
+                    if(taxis[i].customer_queue.size() < min_cus){
+                        min_cus = taxis[i].customer_queue.size();
                         smallest_path = Integer.MAX_VALUE;
                     }
-                    int extended;
-                    if(!taxis[i].customer_queue.isEmpty()){
+                    int extended;           //path where pick-up is done as a detour right now
+                    
+                    if(!taxis[i].customer_queue.isEmpty()){         //a taxi is dropping someone off
                         extended = extendedPath(taxis[i], cus_waiting.peek().current_node);
-                    } else {
+                    } else {        //taxi is idle
                         extended = astar.h.heuristic(taxis[i].taxiPosition, cus_waiting.peek().current_node);
                     }
+                    
+                    //if taxi has smallest detour, assign it
                     if(extended < smallest_path){
                         t = taxis[i];
                         smallest_path = extended;
                     }
                 }
             }
-            if(!t.customer_queue.isEmpty() && smallest_path > astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node)){
-                assigned = false;
-            }
+            //dont assign it if the taxi does not bring it closer
+            if(!t.customer_queue.isEmpty()){
+                boolean pathLength = smallest_path > astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node);
+                boolean getCloser = astar.h.heuristic(cus_waiting.peek().current_node, cus_waiting.peek().goal_node) >
+                                    astar.h.heuristic(t.pick_up.current_node, t.pick_up.goal_node);
+                if(pathLength && getCloser){
+                    assigned = false;
+                }
                 
+            }
+            //if a taxi can be assign, calculate path    
             if (assigned) { 
                 //t.customer_queue.add(cus_waiting.poll());
                 t.pick_up = cus_waiting.poll();
-                //System.out.println(t.taxi_id + " heejo " + t.pick_up.current_node + " " + t.pick_up.goal_node);
                 if(t.isIdle() && t.path.isEmpty()){
                     busytaxis.add(t.taxi_id);
                 }
@@ -205,7 +217,7 @@ public class Bruwmbruwm {
             }
         }
     }
-    
+    //find current path to destination, and find path to pickup and then to destination
     int extendedPath(Taxi t, int des){
         int cur_path = astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node);
         int ext_path = astar.h.heuristic(t.taxiPosition, des) + astar.h.heuristic(des, t.customer_queue.peek().goal_node);
@@ -213,7 +225,8 @@ public class Bruwmbruwm {
     }
     
     void processMoves() {
-        Iterator<Integer> iterator = busytaxis.iterator();
+        Iterator<Integer> iterator = busytaxis.iterator();      //iterate through busy taxis
+        
         while(iterator.hasNext()){
             int y = iterator.next();
             if (!taxis[y].path.isEmpty()) {
