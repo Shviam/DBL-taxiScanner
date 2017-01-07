@@ -1,4 +1,4 @@
-//package Bruwmbruwm;
+package Bruwmbruwm;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -45,12 +45,12 @@ public class TaxiScanner {
      */
     private TaxiScanner(){
         state = State.INITIAL;
-        /*try {
-            scanner = new Scanner(new File("C:001.in"));
+        try {
+            scanner = new Scanner(new File("/C:/input.txt"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TaxiScanner.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        scanner = new Scanner(System.in);
+        }
+        //scanner = new Scanner(System.in);
     }
 
     /**
@@ -128,3 +128,35 @@ public class TaxiScanner {
         System.out.println(s);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

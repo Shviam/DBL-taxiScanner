@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//package Bruwmbruwm;
+package Bruwmbruwm;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -17,7 +17,7 @@ enum State {
 }
 
 public class Taxi {
-    Stack<Integer> path = new Stack<>();
+    Stack<Integer> path = new Stack();
     int taxi_id;
     Queue<Customer> customer_queue;
     Customer pick_up;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//package Bruwmbruwm;
+package Bruwmbruwm;
 
 import java.util.PriorityQueue;
 import java.util.Stack;
@@ -39,26 +39,28 @@ public class Astar {
         Q.add(new NodeDist(source, h.heuristic(source, goal)));
         while(!Q.isEmpty()){
             NodeDist nd = Q.poll();
+            int k = nd.i;
+            int d = nd.d;
             //in case of multiple entries in queue, this node is already explored
-            if(nodes[nd.i].visited) continue;
-            nodes[nd.i].visited = true;
+            if(nodes[k].visited) continue;
+            nodes[k].visited = true;
             //if we reached the goal, stop searching
-            if(nd.i == goal) break;
+            if(k == goal) break;
             
             //check every neighbour of k
-            for(int u : nodes[nd.i].neighbours){
+            for(int u : nodes[k].neighbours){
                 //if already explored, skip it
                 if(nodes[u].visited) 
                     continue;
                 //update distance to source, and fscore = dis to source + heuristic to end
-                int newDis = nodes[nd.i].distance + 1;
+                int newDis = nodes[k].distance + 1;
                 int fscore = newDis + h.heuristic(u, goal);
                 
                 //in case there exist a faster path to u
                 if(newDis < nodes[u].distance){
                     //set node values and add to queue
                     nodes[u].distance = newDis;
-                    nodes[u].parent = nd.i;
+                    nodes[u].parent = k;
                     Q.add(new NodeDist(u, fscore));
                 }
             }
