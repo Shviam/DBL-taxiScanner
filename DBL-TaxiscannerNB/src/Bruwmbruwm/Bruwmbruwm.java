@@ -1,4 +1,4 @@
-package Bruwmbruwm;
+//package Bruwmbruwm;
 
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -14,8 +14,10 @@ public class Bruwmbruwm {
     
     //hotspot variables
     int number_hotspots = 10;
-    HotSpot[] hotspots = new HotSpot[number_hotspots];
+    Node[] hotspots = new Node[number_hotspots];
     //classes
+    
+    int detourChance = 2;
 
     Output output = new Output();
     TaxiScanner taxiscanner = TaxiScanner.getInstance();
@@ -185,7 +187,7 @@ public class Bruwmbruwm {
                     }
                 }
             }
-            if(!t.customer_queue.isEmpty() && smallest_path > astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node)){
+            if(!t.customer_queue.isEmpty() && smallest_path > detourChance * astar.h.heuristic(t.taxiPosition, t.customer_queue.peek().goal_node)){
                 assigned = false;
             }
                 
@@ -275,14 +277,14 @@ public class Bruwmbruwm {
     public void hotSpotFreq() {
         int[] hotspotindices = getHighestFreq(5);
         for (int i = 0; i < 5; i++) {
-            hotspots[i] = new HotSpot(nodes[hotspotindices[i]]);
+            hotspots[i] = nodes[hotspotindices[i]];
         }
     }
 
     public void hotSpotDegree() {
         int[] hotspotindices = getHighestDegree(5);
         for (int i = 5; i < 10; i++) {
-            hotspots[i] = new HotSpot(nodes[hotspotindices[i-5]]);
+            hotspots[i] = nodes[hotspotindices[i-5]];
         }
     }
 
@@ -318,14 +320,14 @@ public class Bruwmbruwm {
 
     public void returnToHotspot(Taxi t) {
         int min_distance = Integer.MAX_VALUE;
-        HotSpot nearest = hotspots[0];
+        Node nearest = hotspots[0];
         for (int x = 0; x < number_hotspots; x++) {
-            if (astar.h.heuristic(t.taxiPosition, hotspots[x].node.position) < min_distance) {
-                min_distance = astar.h.heuristic(t.taxiPosition, hotspots[x].node.position);
+            if (astar.h.heuristic(t.taxiPosition, hotspots[x].position) < min_distance) {
+                min_distance = astar.h.heuristic(t.taxiPosition, hotspots[x].position);
                 nearest = hotspots[x];
             }
         }
-        t.path = astar.aStar(t.taxiPosition, nearest.node.position);
+        t.path = astar.aStar(t.taxiPosition, nearest.position);
     }
     
     public void setIdle(Taxi t){
@@ -339,7 +341,7 @@ public class Bruwmbruwm {
         hotSpotDegree();
         
         for(int x = 0; x < number_of_taxis; x++){
-            taxis[x].taxiPosition = hotspots[x%number_hotspots].node.position;
+            taxis[x].taxiPosition = hotspots[x%number_hotspots].position;
             output.taxiSetPosition(x, taxis[x].taxiPosition);
         }
     }
@@ -397,7 +399,7 @@ public class Bruwmbruwm {
 
                 for(int y = 0; y < size; y++){
                     whitespace = temp.indexOf(" ");
-                    int neighbour = 0;
+                    int neighbour;
                     if(whitespace != -1){
                         neighbour = Integer.parseInt(temp.substring(0, whitespace));
                     }
