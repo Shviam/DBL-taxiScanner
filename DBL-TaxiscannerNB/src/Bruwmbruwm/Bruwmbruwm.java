@@ -17,7 +17,7 @@ public class Bruwmbruwm {
     Node[] hotspots = new Node[number_hotspots];
     //classes
     
-    int detourChance = 2;
+    double detourChance = 0.85;
 
     Output output = new Output();
     TaxiScanner taxiscanner = TaxiScanner.getInstance();
