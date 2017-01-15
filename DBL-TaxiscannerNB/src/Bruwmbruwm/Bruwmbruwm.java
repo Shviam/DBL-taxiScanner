@@ -13,8 +13,8 @@ import java.util.Stack;
 public class Bruwmbruwm {
     
     //hotspot variables
-    int number_hotspots = 10;
-    Node[] hotspots = new Node[number_hotspots];
+    int number_hotspots;
+    Node[] hotspots;
     //classes
     
     double detourChance = 0.85;
@@ -254,12 +254,12 @@ public class Bruwmbruwm {
     public int[] getHighestDegree(int degreeNumber) {
         int storeDegree[] = new int[number_nodes];
         int index ;
-        int large[] = new int[5];
+        int large[] = new int[degreeNumber];
         int max;
         for(int i=0;i<number_nodes;i++){
             storeDegree[i] = nodes[i].di;           
         }
-        for(int j=0; j<5;j++){
+        for(int j=0; j < degreeNumber;j++){
             max = storeDegree[0];
             index = 0;
             for(int i=0;i < storeDegree.length;i++){
@@ -274,20 +274,30 @@ public class Bruwmbruwm {
         return large;
     }
 
-    public void hotSpotFreq() {
-        int[] hotspotindices = getHighestFreq(5);
-        for (int i = 0; i < 5; i++) {
-            hotspots[i] = nodes[hotspotindices[i]];
-        }
-    }
+    
 
-    public void hotSpotDegree() {
-        int[] hotspotindices = getHighestDegree(5);
-        for (int i = 5; i < 10; i++) {
-            hotspots[i] = nodes[hotspotindices[i-5]];
-        }
-    }
+    public void SethotSpots() {
+             //number_hotspots = (int)Math.ceil(number_nodes/100.0);
+             number_hotspots = Math.min(Math.max(taxis.length*2, 1), number_nodes);
+             
+             double freq_ratio = 0.66;
+             hotspots = new Node[number_hotspots];
+             //Set amounts of hotspots
+             int freq_hotspots = (int)Math.ceil(freq_ratio*number_hotspots);
+             int deg_hotspots = Math.max(number_hotspots - freq_hotspots, 1);
 
+             int[] hotspotindices = getHighestFreq(freq_hotspots);
+            for (int i = 0; i < freq_hotspots; i++) {
+                 hotspots[i] = nodes[hotspotindices[i]];
+             }
+
+             hotspotindices = getHighestDegree(deg_hotspots);
+             for (int i = freq_hotspots; i < number_hotspots; i++) {
+                 hotspots[i] = nodes[hotspotindices[i-freq_hotspots]];
+             }
+
+    }
+    
     public void doFunction(Taxi t, int Id) {
         //Will do the function the taxi is set to do
         switch (t.function) {
@@ -337,8 +347,7 @@ public class Bruwmbruwm {
     
     public void distributeTaxis(){
         //Establish hotspots
-        hotSpotFreq();
-        hotSpotDegree();
+        SethotSpots();
         
         for(int x = 0; x < number_of_taxis; x++){
             taxis[x].taxiPosition = hotspots[x%number_hotspots].position;
